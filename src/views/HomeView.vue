@@ -1,8 +1,31 @@
 <script setup lang="ts">
 import CenteredDivider from '@/components/CenteredDivider.vue'
+import PortalFooter from '@/components/PortalFooter.vue'
 import RecentActivities from '@/components/RecentActivities.vue'
 import StatisticTable from '@/components/StatisticTable.vue'
 import { ref } from 'vue'
+import AboutCanvas from '@/components/AboutCanvas.vue'
+import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
+
+defineProps<{
+  canvas_ids: {
+    about: string
+    feedback: string
+  }
+  about_canvas_content: string
+  footer: {
+    left_part: {
+      logo_path: string
+      org_name: string
+      org_link: string
+    }
+    right_part: {
+      name: string
+      link: string
+      toggle: boolean
+    }[]
+  }
+}>()
 
 const statistic_items = ref([
   { name: '覆盖的省级行政区', value: 1000 },
@@ -38,5 +61,13 @@ const activity_items = ref([
         <RecentActivities :items="activity_items" />
       </div>
     </div>
+    <AboutCanvas
+      :id="canvas_ids.about"
+      :label="`${canvas_ids.about}-label`"
+      title="关于我们"
+      :content="about_canvas_content"
+    />
+    <FeedbackCanvas :id="canvas_ids.feedback" :label="`${canvas_ids.feedback}-label`" />
+    <PortalFooter :left_part="footer.left_part" :right_part="footer.right_part" />
   </div>
 </template>
