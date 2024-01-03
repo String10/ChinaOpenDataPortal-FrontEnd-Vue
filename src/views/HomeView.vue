@@ -6,25 +6,11 @@ import StatisticTable from '@/components/StatisticTable.vue'
 import { ref } from 'vue'
 import AboutCanvas from '@/components/AboutCanvas.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
+import type { CanvasList, Footer } from '@/utils/types'
 
 defineProps<{
-  canvas_ids: {
-    about: string
-    feedback: string
-  }
-  about_canvas_content: string
-  footer: {
-    left_part: {
-      logo_path: string
-      org_name: string
-      org_link: string
-    }
-    right_part: {
-      name: string
-      link: string
-      toggle: boolean
-    }[]
-  }
+  canvas: CanvasList
+  footer: Footer
 }>()
 
 const statistic_items = ref([
@@ -62,12 +48,11 @@ const activity_items = ref([
       </div>
     </div>
     <AboutCanvas
-      :id="canvas_ids.about"
-      :label="`${canvas_ids.about}-label`"
-      title="关于我们"
-      :content="about_canvas_content"
+      :id="canvas.about.id"
+      :label="`${canvas.about.id}-label`"
+      :content="canvas.about.content || '暂无内容'"
     />
-    <FeedbackCanvas :id="canvas_ids.feedback" :label="`${canvas_ids.feedback}-label`" />
+    <FeedbackCanvas :id="canvas.feedback.id" :label="`${canvas.feedback.id}-label`" />
     <PortalFooter :left_part="footer.left_part" :right_part="footer.right_part" />
   </div>
 </template>

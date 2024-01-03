@@ -2,7 +2,6 @@
 defineProps<{
   id: string
   label: string
-  title: string
   content: string
 }>()
 </script>
@@ -10,7 +9,7 @@ defineProps<{
 <template>
   <div class="offcanvas offcanvas-bottom" tabindex="-1" :id="id" :aria-labelledby="label">
     <div class="offcanvas-header">
-      <h2 class="offcanvas-title" :id="label">{{ title }}</h2>
+      <h2 class="offcanvas-title" :id="label">关于我们</h2>
       <button
         type="button"
         class="btn-close text-reset"
