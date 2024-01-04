@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import PortalHeader from '@/components/PortalHeader.vue'
-import HomeView from '@/views/HomeView.vue'
 import { ref } from 'vue'
 import type { CanvasList, Footer } from '@/utils/types'
+import type { RouterView } from 'vue-router'
 
 const canvas = ref<CanvasList>({
   about: {
@@ -36,6 +36,6 @@ const footer = ref<Footer>({
 <template>
   <div class="page">
     <PortalHeader />
-    <HomeView :footer="footer" :canvas="canvas" />
+    <RouterView :footer="footer" :canvas="canvas" />
   </div>
 </template>

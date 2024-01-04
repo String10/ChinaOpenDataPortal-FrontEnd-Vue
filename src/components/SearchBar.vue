@@ -1,16 +1,34 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
 defineProps<{
   defaultQuery: string
 }>()
+
+const router = useRouter()
+const query = ref('')
 </script>
 
 <template>
   <div class="row g-2">
     <div class="col">
-      <input type="text" class="form-control" :placeholder="defaultQuery" />
+      <input type="text" class="form-control" v-model="query" :placeholder="defaultQuery" />
     </div>
     <div class="col-auto">
-      <a href="#" class="btn btn-icon" aria-label="Button">
+      <a
+        href="#"
+        class="btn btn-icon"
+        aria-label="Button"
+        @click="
+          router.push({
+            name: 'result',
+            query: {
+              q: query || defaultQuery
+            }
+          })
+        "
+      >
         <!-- Download SVG icon from http://tabler-icons.io/i/search -->
         <svg
           xmlns="http://www.w3.org/2000/svg"

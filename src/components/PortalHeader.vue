@@ -6,10 +6,10 @@ import SearchBar from '@/components/SearchBar.vue'
   <header class="mt-4" id="header-content">
     <div class="container-xl">
       <div class="row g-2 align-items-center">
-        <div class="col-12 mb-3">
+        <router-link class="col-12 mb-3 no-link-style" to="/">
           <div class="page-pretitle">China Open Data Portal</div>
           <h1 class="page-title">全国公共数据一站式搜索</h1>
-        </div>
+        </router-link>
 
         <div class="col-12">
           <SearchBar defaultQuery="山东省教师资格认定" />
@@ -18,3 +18,10 @@ import SearchBar from '@/components/SearchBar.vue'
     </div>
   </header>
 </template>
+
+<style scoped>
+.no-link-style {
+  text-decoration: none;
+  color: inherit;
+}
+</style>
