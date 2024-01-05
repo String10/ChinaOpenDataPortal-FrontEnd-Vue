@@ -1,33 +1,51 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { is_loading } from '@/utils/loading'
 
 defineProps<{
   defaultQuery: string
 }>()
 
-const router = useRouter()
 const query = ref('')
 </script>
 
 <template>
   <div class="row g-2">
     <div class="col">
-      <input type="text" class="form-control" v-model="query" :placeholder="defaultQuery" />
+      <div class="input-group input-group-flat">
+        <input type="text" class="form-control" v-model="query" :placeholder="defaultQuery" />
+        <span class="input-group-text cursor-pointer" @click="query = ''">
+          <!-- Download SVG icon from http://tabler-icons.io/i/x -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-x"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+          </svg>
+        </span>
+      </div>
     </div>
     <div class="col-auto">
-      <a
+      <router-link
         href="#"
         class="btn btn-icon"
         aria-label="Button"
-        @click="
-          router.push({
-            name: 'result',
-            query: {
-              q: query || defaultQuery
-            }
-          })
-        "
+        :to="{
+          name: 'result',
+          query: {
+            q: query || defaultQuery
+          }
+        }"
       >
         <!-- Download SVG icon from http://tabler-icons.io/i/search -->
         <svg
@@ -41,12 +59,21 @@ const query = ref('')
           fill="none"
           stroke-linecap="round"
           stroke-linejoin="round"
+          :class="{
+            'visually-hidden': is_loading
+          }"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
           <path d="M21 21l-6 -6" />
         </svg>
-      </a>
+        <div
+          class="spinner-border spinner-border-sm"
+          :class="{
+            'visually-hidden': !is_loading
+          }"
+        ></div>
+      </router-link>
     </div>
   </div>
 </template>

@@ -3,9 +3,9 @@ import CenteredDivider from '@/components/CenteredDivider.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import RecentActivities from '@/components/RecentActivities.vue'
 import StatisticTable from '@/components/StatisticTable.vue'
-import { ref } from 'vue'
 import AboutCanvas from '@/components/AboutCanvas.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
+import { ref } from 'vue'
 import type { CanvasList, Footer } from '@/utils/types'
 
 defineProps<{
