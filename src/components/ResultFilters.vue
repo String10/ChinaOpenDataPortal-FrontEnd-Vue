@@ -1,25 +1,41 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { filters } from '@/utils/fetch'
+import { fetch_filters } from '@/utils/fetch'
+import { FilterOpenness } from '@/utils/types'
 
 const locations = ref<{ [key: string]: string[] }>({})
 const industries = ref<string[]>([])
 
-const curr_province = ref(),
-  curr_city = ref(),
-  curr_industry = ref(),
-  type_open_selected = ref(),
-  type_cond_selected = ref()
+const curr_province = ref()
+const curr_city = ref()
+const curr_industry = ref()
+const type_open_selected = ref()
+const type_cond_selected = ref()
+const curr_filters = computed(() => {
+  let filters = {
+    province: curr_province.value,
+    city: curr_city.value,
+    industry: curr_industry.value,
+    openness: FilterOpenness.None
+  }
+  if (type_open_selected.value) {
+    filters.openness |= FilterOpenness.Open
+  }
+  if (type_cond_selected.value) {
+    filters.openness |= FilterOpenness.Cond
+  }
+  return filters
+})
 
 const reset_filter = () => {
   curr_province.value = Object.keys(locations.value)[0]
-  curr_city.value = ''
+  curr_city.value = undefined
   curr_industry.value = industries.value[0]
   type_open_selected.value = true
   type_cond_selected.value = true
 }
 
-filters().then((res) => {
+fetch_filters().then((res) => {
   const sort_list = (list: string[]) => {
     const contain_item = list.includes('全部')
     if (contain_item) {
@@ -114,7 +130,7 @@ watch(curr_province, () => {
         </label>
       </div>
       <div class="mt-5">
-        <button class="btn btn-primary w-100">
+        <a class="btn btn-primary w-100" @click="$emit('update:filters', curr_filters)">
           <!-- Download SVG icon from https://tabler.io/i/filter -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -134,8 +150,11 @@ watch(curr_province, () => {
             />
           </svg>
           应用更改
-        </button>
-        <a class="btn btn-link w-100" @click="reset_filter">
+        </a>
+        <a
+          class="btn btn-link w-100"
+          @click="reset_filter(), $emit('update:filters', curr_filters)"
+        >
           <!-- Download SVG icon from http://tabler-icons.io/i/filter-off -->
           <svg
             xmlns="http://www.w3.org/2000/svg"

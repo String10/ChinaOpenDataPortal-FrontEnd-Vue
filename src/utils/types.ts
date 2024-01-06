@@ -19,3 +19,16 @@ export type Footer = {
     toggle: boolean
   }[]
 }
+
+export enum FilterOpenness {
+  All = 0b11,
+  Open = 0b01,
+  Cond = 0b10,
+  None = 0b00
+}
+export type Filters = {
+  province?: string
+  city?: string
+  industry?: string
+  openness?: FilterOpenness
+}

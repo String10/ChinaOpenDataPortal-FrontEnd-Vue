@@ -3,7 +3,7 @@ import AboutCanvas from '@/components/AboutCanvas.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import ResultFilters from '@/components/ResultFilters.vue'
-import type { CanvasList, Footer } from '@/utils/types'
+import type { Filters, CanvasList, Footer } from '@/utils/types'
 import { ref, watch } from 'vue'
 import { search } from '@/utils/fetch'
 import { useRoute } from 'vue-router'
@@ -14,6 +14,12 @@ defineProps<{
   canvas: CanvasList
   footer: Footer
 }>()
+
+const filters = ref<Filters>()
+const update_filter = (new_filters: Filters) => {
+  filters.value = new_filters
+  updateView()
+}
 
 const route = useRoute()
 
@@ -37,7 +43,7 @@ const updateView = () => {
   setLoadingState(true)
 
   startTime = Date.now()
-  search(query).then((items) => {
+  search(query, filters.value).then((items) => {
     clearInterval(timer)
 
     results.value = items
@@ -72,7 +78,7 @@ updateView()
     </div>
     <div class="page-body">
       <div class="container-xl">
-        <ResultFilters />
+        <ResultFilters @update:filters="update_filter" />
       </div>
     </div>
     <AboutCanvas
