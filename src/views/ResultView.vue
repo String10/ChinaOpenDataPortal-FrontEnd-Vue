@@ -2,6 +2,7 @@
 import AboutCanvas from '@/components/AboutCanvas.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
+import ResultFilters from '@/components/ResultFilters.vue'
 import type { CanvasList, Footer } from '@/utils/types'
 import { ref, watch } from 'vue'
 import { search } from '@/utils/fetch'
@@ -70,7 +71,9 @@ updateView()
       </div>
     </div>
     <div class="page-body">
-      <div class="container-xl"></div>
+      <div class="container-xl">
+        <ResultFilters />
+      </div>
     </div>
     <AboutCanvas
       :id="canvas.about.id"
