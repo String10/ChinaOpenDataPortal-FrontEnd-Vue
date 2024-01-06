@@ -35,6 +35,10 @@ const reset_filter = () => {
   type_cond_selected.value = true
 }
 
+const invalid_filters = computed(() => {
+  return !(type_cond_selected.value || type_open_selected.value)
+})
+
 fetch_filters().then((res) => {
   const sort_list = (list: string[]) => {
     const contain_item = list.includes('全部')
@@ -114,6 +118,9 @@ watch(curr_province, () => {
             class="form-check-input"
             name="form-tags[]"
             value="open"
+            :class="{
+              'is-invalid': invalid_filters
+            }"
             v-model="type_open_selected"
           />
           <span class="form-check-label">无条件开放</span>
@@ -124,13 +131,27 @@ watch(curr_province, () => {
             class="form-check-input"
             name="form-tags[]"
             value="cond"
+            :class="{
+              'is-invalid': invalid_filters
+            }"
             v-model="type_cond_selected"
           />
           <span class="form-check-label">有条件开放</span>
         </label>
       </div>
+      <div
+        class="alert alert-danger m-0"
+        :class="{
+          'visually-hidden': !invalid_filters
+        }"
+      >
+        请选择至少一种开放类型
+      </div>
       <div class="mt-5">
-        <a class="btn btn-primary w-100" @click="$emit('update:filters', curr_filters)">
+        <a
+          class="btn btn-primary w-100"
+          @click="invalid_filters ? null : $emit('update:filters', curr_filters)"
+        >
           <!-- Download SVG icon from https://tabler.io/i/filter -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
