@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { FilterOpenness, type Filters } from '@/utils/types'
 
 export async function search(query: string, filters?: Filters) {

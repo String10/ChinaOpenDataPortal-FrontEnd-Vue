@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+
 import { fetch_filters } from '@/utils/fetch'
 import { FilterOpenness } from '@/utils/types'
 
@@ -9,8 +10,8 @@ const industries = ref<string[]>([])
 const curr_province = ref()
 const curr_city = ref()
 const curr_industry = ref()
-const type_open_selected = ref()
-const type_cond_selected = ref()
+const type_open_selected = ref(true)
+const type_cond_selected = ref(true)
 const curr_filters = computed(() => {
   let filters = {
     province: curr_province.value,

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import PortalHeader from '@/components/PortalHeader.vue'
 import { ref } from 'vue'
-import type { CanvasList, Footer } from '@/utils/types'
 import type { RouterView } from 'vue-router'
+
+import PortalHeader from '@/components/PortalHeader.vue'
+
+import type { CanvasList, Footer } from '@/utils/types'
 
 const canvas = ref<CanvasList>({
   about: {

@@ -1,14 +1,16 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
 import AboutCanvas from '@/components/AboutCanvas.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import ResultFilters from '@/components/ResultFilters.vue'
-import type { Filters, CanvasList, Footer } from '@/utils/types'
-import { ref, watch } from 'vue'
 import { search } from '@/utils/fetch'
-import { useRoute } from 'vue-router'
 import { toThousandFilter } from '@/utils/filters'
 import { setLoadingState } from '@/utils/loading'
+
+import type { Filters, CanvasList, Footer } from '@/utils/types'
 
 defineProps<{
   canvas: CanvasList

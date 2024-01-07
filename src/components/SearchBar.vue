@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
 import { is_loading } from '@/utils/loading'
 
 defineProps<{
   defaultQuery: string
 }>()
 
-const query = ref('')
+const route = useRoute()
+const query = ref(route.query?.q as string)
+watch(
+  () => route.query?.q,
+  (new_query) => {
+    query.value = new_query as string
+  }
+)
 </script>
 
 <template>
