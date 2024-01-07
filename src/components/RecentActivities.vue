@@ -17,20 +17,18 @@ const formatDate = (date: Date) => {
 </script>
 
 <template>
-  <div class="col-12 mt-3">
-    <ul class="timeline timeline-simple">
-      <li class="timeline-event" v-for="(item, index) in items" :key="index">
-        <div class="timeline-event-icon">
-          <svg>...</svg>
+  <ul class="timeline timeline-simple">
+    <li class="timeline-event" v-for="(item, index) in items" :key="index">
+      <div class="timeline-event-icon">
+        <svg>...</svg>
+      </div>
+      <div class="card timeline-event-card">
+        <div class="card-body">
+          <div class="text-secondary float-end">{{ formatDate(item.date) }}</div>
+          <h4>{{ item.title }}</h4>
+          <p class="text-secondary">{{ item.detail }}</p>
         </div>
-        <div class="card timeline-event-card">
-          <div class="card-body">
-            <div class="text-secondary float-end">{{ formatDate(item.date) }}</div>
-            <h4>{{ item.title }}</h4>
-            <p class="text-secondary">{{ item.detail }}</p>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
+      </div>
+    </li>
+  </ul>
 </template>

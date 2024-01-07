@@ -6,9 +6,10 @@ import AboutCanvas from '@/components/AboutCanvas.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import ResultFilters from '@/components/ResultFilters.vue'
+import EmptyResult from '@/components/EmptyResult.vue'
 import { search } from '@/utils/fetch'
 import { toThousandFilter } from '@/utils/filters'
-import { setLoadingState } from '@/utils/loading'
+import { setLoadingState, is_loading } from '@/utils/loading'
 
 import type { Filters, CanvasList, Footer } from '@/utils/types'
 
@@ -30,7 +31,6 @@ const timer = setInterval(() => {
 }, 1000)
 
 const results = ref([])
-const hiddenHeader = ref(true)
 const searchTime = ref('0.00')
 
 let startTime: number
@@ -41,7 +41,6 @@ const updateView = () => {
     throw new Error('query is empty')
   }
 
-  hiddenHeader.value = true
   setLoadingState(true)
 
   startTime = Date.now()
@@ -50,7 +49,6 @@ const updateView = () => {
 
     results.value = items
 
-    hiddenHeader.value = false
     setLoadingState(false)
   })
 }
@@ -64,7 +62,7 @@ updateView()
     <div
       class="page-header"
       :class="{
-        'visually-hidden': hiddenHeader
+        'visually-hidden': is_loading
       }"
     >
       <div class="container-xl">
@@ -80,7 +78,16 @@ updateView()
     </div>
     <div class="page-body">
       <div class="container-xl">
-        <ResultFilters @update:filters="update_filter" />
+        <div class="row g-4">
+          <div class="col-sm-6 col-lg-3">
+            <ResultFilters @update:filters="update_filter" />
+          </div>
+          <div class="col-sm-6 col-lg-9">
+            <div class="row row-cards">
+              <EmptyResult :class="{ 'visually-hidden': is_loading || results.length > 0 }" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <AboutCanvas

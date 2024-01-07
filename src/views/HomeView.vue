@@ -44,9 +44,13 @@ const activity_items = ref([
   <div class="page-wrapper">
     <div class="page-body">
       <div class="container-xl">
-        <StatisticTable :items="statistic_items" />
+        <div class="col-12">
+          <StatisticTable :items="statistic_items" />
+        </div>
         <CenteredDivider text="近期动态" />
-        <RecentActivities :items="activity_items" />
+        <div class="col-12 mt-3">
+          <RecentActivities :items="activity_items" />
+        </div>
       </div>
     </div>
     <AboutCanvas
