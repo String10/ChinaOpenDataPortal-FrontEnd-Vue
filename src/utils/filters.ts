@@ -40,6 +40,7 @@ export function searchResultFilter(res: SearchResult) {
     url: res.url,
     province: res.province || '-',
     city: res.city,
+    portal_name: res.portal_name || '-',
     standard_industry: res.standard_industry || '-'
   }
 }

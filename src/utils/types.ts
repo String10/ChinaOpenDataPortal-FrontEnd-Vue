@@ -51,5 +51,6 @@ export type SearchResult = {
   province: string
   city: string
   url: string
+  portal_name: string
   standard_industry: string
 }
