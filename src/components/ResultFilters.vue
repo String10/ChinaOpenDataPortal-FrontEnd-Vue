@@ -80,8 +80,8 @@ watch(curr_province, () => {
       </select>
     </div>
     <!-- City -->
-    <div class="subheader mb-2" v-if="show_cites">城市</div>
-    <div class="mb-3" v-if="show_cites">
+    <div class="subheader mb-2" v-show="show_cites">城市</div>
+    <div class="mb-3" v-show="show_cites">
       <select name="" class="form-select" v-model="curr_city">
         <option v-for="(city, index) in locations[curr_province]" :key="index">
           {{ city }}
@@ -127,7 +127,7 @@ watch(curr_province, () => {
         <span class="form-check-label">有条件开放</span>
       </label>
     </div>
-    <div class="alert alert-danger m-0" v-if="invalid_filters">请选择至少一种开放类型</div>
+    <div class="alert alert-danger m-0" v-show="invalid_filters">请选择至少一种开放类型</div>
     <div class="mt-5">
       <a
         class="btn btn-primary w-100"

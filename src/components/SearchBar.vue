@@ -69,13 +69,13 @@ const router = useRouter()
             fill="none"
             stroke-linecap="round"
             stroke-linejoin="round"
-            v-if="!is_loading"
+            v-show="!is_loading"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
             <path d="M21 21l-6 -6" />
           </svg>
-          <div class="spinner-border spinner-border-sm" v-if="is_loading"></div>
+          <div class="spinner-border spinner-border-sm" v-show="is_loading"></div>
         </button>
       </div>
     </div>

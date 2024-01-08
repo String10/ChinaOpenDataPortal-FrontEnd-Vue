@@ -20,7 +20,7 @@ const hovering = ref(false)
     @mouseenter="hovering = true"
     @mouseleave="hovering = false"
   >
-    <div class="card-status-top bg-cyan" v-if="hovering && !expanded"></div>
+    <div class="card-status-top bg-cyan" v-show="hovering && !expanded"></div>
     <div class="card-header">
       <h3 class="card-title">
         {{ result.title }}
@@ -68,10 +68,10 @@ const hovering = ref(false)
           </div>
         </li>
       </ul>
-      <p class="text-secondary cursor-text mt-3" v-if="expanded" @click.stop>
+      <p class="text-secondary cursor-text mt-3" v-show="expanded" @click.stop>
         {{ result.description }}
       </p>
-      <div class="datagrid" v-if="expanded">
+      <div class="datagrid" v-show="expanded">
         <div class="datagrid-item">
           <div class="datagrid-title">来源部门</div>
           <div class="datagrid-content">{{ result.department }}</div>
