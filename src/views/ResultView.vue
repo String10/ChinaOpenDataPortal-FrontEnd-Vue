@@ -59,12 +59,7 @@ updateView()
 
 <template>
   <div class="page-wrapper">
-    <div
-      class="page-header"
-      :class="{
-        'visually-hidden': is_loading
-      }"
-    >
+    <div class="page-header" v-if="!is_loading">
       <div class="container-xl">
         <div class="row g-2 align-items-center">
           <div class="col">
@@ -84,7 +79,7 @@ updateView()
           </div>
           <div class="col-sm-6 col-lg-9">
             <div class="row row-cards">
-              <EmptyResult :class="{ 'visually-hidden': is_loading || results.length > 0 }" />
+              <EmptyResult v-if="!(is_loading || results.length > 0)" />
             </div>
           </div>
         </div>
