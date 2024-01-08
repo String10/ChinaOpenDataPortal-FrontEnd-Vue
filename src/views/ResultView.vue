@@ -7,8 +7,9 @@ import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import ResultFilters from '@/components/ResultFilters.vue'
 import EmptyResult from '@/components/EmptyResult.vue'
+import ResultItem from '@/components/ResultItem.vue'
 import { search } from '@/utils/fetch'
-import { toThousandFilter } from '@/utils/filters'
+import { searchResultFilter, toThousandFilter } from '@/utils/filters'
 import { setLoadingState, is_loading } from '@/utils/loading'
 
 import type { Filters, CanvasList, Footer } from '@/utils/types'
@@ -31,6 +32,7 @@ const timer = setInterval(() => {
 }, 1000)
 
 const results = ref([])
+const curr_result = ref(-1)
 const searchTime = ref('0.00')
 
 let startTime: number
@@ -80,6 +82,13 @@ updateView()
           <div class="col-sm-6 col-lg-9">
             <div class="row row-cards">
               <EmptyResult v-if="!(is_loading || results.length > 0)" />
+              <ResultItem
+                v-for="(result, index) in results"
+                :key="index"
+                :result="searchResultFilter(result)"
+                :expanded="curr_result === index"
+                @click="curr_result = curr_result === index ? -1 : index"
+              />
             </div>
           </div>
         </div>

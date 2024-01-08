@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { dateFilter } from '@/utils/filters'
+
 defineProps<{
   items: {
     title: string
@@ -6,14 +8,6 @@ defineProps<{
     date: Date
   }[]
 }>()
-
-const formatDate = (date: Date) => {
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  })
-}
 </script>
 
 <template>
@@ -24,7 +18,7 @@ const formatDate = (date: Date) => {
       </div>
       <div class="card timeline-event-card">
         <div class="card-body">
-          <div class="text-secondary float-end">{{ formatDate(item.date) }}</div>
+          <div class="text-secondary float-end">{{ dateFilter(item.date) }}</div>
           <h4>{{ item.title }}</h4>
           <p class="text-secondary">{{ item.detail }}</p>
         </div>

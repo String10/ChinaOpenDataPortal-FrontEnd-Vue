@@ -32,3 +32,24 @@ export type Filters = {
   industry?: string
   openness?: FilterOpenness
 }
+
+export type SearchResult = {
+  title: string
+  description: string
+  tags: string[]
+  department: string
+  category: string
+  industry: string
+  publish_time: Date | string
+  update_time: Date | string
+  update_frequency: string
+  is_open: boolean
+  data_volume: number | string
+  telephone: string
+  email: string
+  data_formats: string[]
+  province: string
+  city: string
+  url: string
+  standard_industry: string
+}
