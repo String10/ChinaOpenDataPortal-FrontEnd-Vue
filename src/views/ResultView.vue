@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import AboutCanvas from '@/components/AboutCanvas.vue'
@@ -33,9 +33,38 @@ const timer = setInterval(() => {
 
 const results = ref<SearchResult[]>([])
 const curr_result = ref(-1)
-const searchTime = ref('0.00')
+const curr_page = ref(1)
+const curr_page_size = ref(5)
+const curr_page_count = computed(() => {
+  return Math.ceil(results.value.length / curr_page_size.value)
+})
+const curr_page_items = computed(() => {
+  const page_item_size = 5
+  if (curr_page_count.value <= page_item_size) {
+    return [...Array(curr_page_count.value).keys()].map((i) => i + 1)
+  }
+  var page_items = [...Array(page_item_size).keys()].map(
+    (i) => curr_page.value + i - Math.floor(page_item_size / 2)
+  )
+  if (page_items[0] < 1) {
+    page_items = page_items.map((i) => i - page_items[0] + 1)
+  }
+  if (page_items[page_items.length - 1] > curr_page_count.value) {
+    page_items = page_items.map(
+      (i) => i - page_items[page_items.length - 1] + curr_page_count.value
+    )
+  }
+  return page_items
+})
+const curr_page_start = computed(() => {
+  return (curr_page.value - 1) * curr_page_size.value + 1
+})
+const curr_page_end = computed(() => {
+  return Math.min(results.value.length, curr_page.value * curr_page_size.value)
+})
 
 let startTime: number
+const searchTime = ref('0.00')
 
 const updateView = () => {
   const query = route.query.q
@@ -81,14 +110,89 @@ updateView()
           </div>
           <div class="col-sm-6 col-lg-9">
             <div class="row row-cards">
-              <EmptyResult v-show="!(is_loading || results.length > 0)" />
+              <EmptyResult v-if="!(is_loading || results.length > 0)" />
               <ResultItem
-                v-for="(result, index) in results"
+                v-for="(result, index) in results.slice(curr_page_start - 1, curr_page_end)"
                 :key="index"
                 :result="searchResultFilter(result)"
                 :expanded="curr_result === index"
                 @click="curr_result = curr_result === index ? -1 : index"
               />
+            </div>
+            <div class="d-flex align-items-center mt-5" v-if="!is_loading && results.length > 0">
+              <p class="m-0 text-secondary">
+                正在展示
+                <span>{{ results.length }}</span>
+                个数据集中的第
+                <span>{{ curr_page_start }}</span>
+                项到第
+                <span>{{ curr_page_end }}</span>
+                项
+              </p>
+              <ul class="pagination m-0 ms-auto">
+                <li
+                  class="page-item"
+                  :class="{
+                    disabled: curr_page <= 1
+                  }"
+                >
+                  <a class="page-link" href="#" @click="curr_page -= 1">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M15 6l-6 6l6 6"></path>
+                    </svg>
+                    上一页
+                  </a>
+                </li>
+                <li
+                  class="page-item"
+                  v-for="page in curr_page_items"
+                  :key="page"
+                  :class="{
+                    active: page === curr_page
+                  }"
+                >
+                  <a class="page-link" href="#" @click="curr_page = page">{{ page }}</a>
+                </li>
+                <li
+                  class="page-item"
+                  :class="{
+                    disabled: curr_page >= curr_page_count
+                  }"
+                >
+                  <a class="page-link" href="#" @click="curr_page += 1">
+                    下一页
+                    <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M9 6l6 6l-6 6"></path>
+                    </svg>
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
