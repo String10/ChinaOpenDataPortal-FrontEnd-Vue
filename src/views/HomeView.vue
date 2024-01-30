@@ -8,36 +8,23 @@ import StatisticTable from '@/components/StatisticTable.vue'
 import AboutCanvas from '@/components/AboutCanvas.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 
-import type { CanvasList, Footer } from '@/utils/types'
+import type { Activity, CanvasList, Footer, Statistic } from '@/utils/types'
+import { fetch_statistics, fetch_activities } from '@/utils/fetch'
 
 defineProps<{
   canvas: CanvasList
   footer: Footer
 }>()
 
-const statistic_items = ref([
-  { name: '覆盖的省级行政区', value: 1000 },
-  { name: '接入的公共数据开放平台', value: 2000 },
-  { name: '索引的数据集', value: 2000 }
-])
-const activity_items = ref([
-  {
-    title: '系统更新',
-    detail: '新增24个平台，索引数据集增加到489,882个。',
-    date: new Date('2023.10.14')
-  },
-  {
-    title: '论文上线',
-    detail:
-      "系统论文 Dataset Search over Integrated Metadata from China's Public Data Open Platforms 被 CCF BigData 2023 接收。",
-    date: new Date('2023.08.16')
-  },
-  {
-    title: '系统上线',
-    detail: '全国公共数据一站式搜索系统上线，接入124个公共数据开放平台。',
-    date: new Date('2023.07.29')
-  }
-])
+const statistic_items = ref<Statistic[]>([])
+fetch_statistics().then((res) => {
+  statistic_items.value = res
+})
+
+const activity_items = ref<Activity[]>([])
+fetch_activities().then((res) => {
+  activity_items.value = res
+})
 </script>
 
 <template>

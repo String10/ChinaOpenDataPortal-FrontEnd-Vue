@@ -1,12 +1,9 @@
 <script setup lang="ts">
+import type { Activity } from '@/utils/types'
 import { dateFilter } from '@/utils/filters'
 
 defineProps<{
-  items: {
-    title: string
-    detail: string
-    date: Date
-  }[]
+  items: Activity[]
 }>()
 </script>
 

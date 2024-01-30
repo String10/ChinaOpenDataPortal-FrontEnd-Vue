@@ -7,6 +7,22 @@ export type CanvasList = {
   [key: string]: CanvasItem
 }
 
+export type Statistic = {
+  title: string
+  count: number
+}
+
+export type Activity = {
+  title: string
+  detail: string
+  date: Date | string
+}
+
+export type FilterSet = {
+  locations: { [key: string]: string[] }
+  industries: string[]
+}
+
 export type Footer = {
   left_part: {
     logo_path: string

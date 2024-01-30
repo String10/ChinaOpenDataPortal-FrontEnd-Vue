@@ -8,11 +8,11 @@ import PortalFooter from '@/components/PortalFooter.vue'
 import ResultFilters from '@/components/ResultFilters.vue'
 import EmptyResult from '@/components/EmptyResult.vue'
 import ResultItem from '@/components/ResultItem.vue'
+
 import { search } from '@/utils/fetch'
 import { searchResultFilter, toThousandFilter } from '@/utils/filters'
 import { setLoadingState, is_loading } from '@/utils/loading'
-
-import type { Filters, CanvasList, Footer } from '@/utils/types'
+import type { Filters, CanvasList, Footer, SearchResult } from '@/utils/types'
 
 defineProps<{
   canvas: CanvasList
@@ -31,7 +31,7 @@ const timer = setInterval(() => {
   searchTime.value = ((Date.now() - startTime) / 1000).toFixed(2)
 }, 1000)
 
-const results = ref([])
+const results = ref<SearchResult[]>([])
 const curr_result = ref(-1)
 const searchTime = ref('0.00')
 

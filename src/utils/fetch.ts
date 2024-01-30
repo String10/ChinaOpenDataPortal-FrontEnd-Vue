@@ -1,16 +1,24 @@
 import axios from 'axios'
 
-import { FilterOpenness, type Filters } from '@/utils/types'
+import {
+  FilterOpenness,
+  type Activity,
+  type Filters,
+  type FilterSet,
+  type SearchResult,
+  type Statistic
+} from '@/utils/types'
 
 export async function search(query: string, filters?: Filters) {
   const backend_host = import.meta.env.VITE_BACKEND_HOST
+  const default_value: SearchResult[] = []
   if (!backend_host) {
     console.error('VUE_APP_BACKEND_HOST is not set')
-    return {}
+    return default_value
   }
   const { openness, ...rest_filters } = filters || {}
   try {
-    const response = await axios.get(`${backend_host}/search`, {
+    const response = await axios.get<SearchResult[]>(`${backend_host}/search`, {
       params: {
         q: query,
         is_open:
@@ -28,20 +36,56 @@ export async function search(query: string, filters?: Filters) {
   } catch (error) {
     console.error(error)
   }
-  return {}
+  return default_value
 }
 
 export async function fetch_filters() {
   const backend_host = import.meta.env.VITE_BACKEND_HOST
+  const default_value: FilterSet = {
+    locations: {},
+    industries: []
+  }
   if (!backend_host) {
     console.error('VUE_APP_BACKEND_HOST is not set')
-    return {}
+    return default_value
   }
   try {
-    const response = await axios.get(`${backend_host}/filters`)
+    const response = await axios.get<FilterSet>(`${backend_host}/filters`)
     return response.data
   } catch (error) {
     console.error(error)
   }
-  return {}
+  return default_value
+}
+
+export async function fetch_statistics() {
+  const backend_host = import.meta.env.VITE_BACKEND_HOST
+  const default_value: Statistic[] = []
+  if (!backend_host) {
+    console.error('VUE_APP_BACKEND_HOST is not set')
+    return default_value
+  }
+  try {
+    const response = await axios.get<Statistic[]>(`${backend_host}/statistics`)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+  return default_value
+}
+
+export async function fetch_activities() {
+  const backend_host = import.meta.env.VITE_BACKEND_HOST
+  const default_value: Activity[] = []
+  if (!backend_host) {
+    console.error('VUE_APP_BACKEND_HOST is not set')
+    return default_value
+  }
+  try {
+    const response = await axios.get<Activity[]>(`${backend_host}/activities`)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+  return default_value
 }
