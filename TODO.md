@@ -1,7 +1,7 @@
 - [ ] Result View:
 
   - [x] Fetch `Statistics` and `Recent Activities`.
-  - [ ] Pages in Desktop & Infinite Stream in Mobile.
+  - [x] Pages in Desktop & Infinite Stream in Mobile.
   - [ ] Filter <-> URL.
   - [ ] Link Share: Add DocId to SearchResult Type.
 

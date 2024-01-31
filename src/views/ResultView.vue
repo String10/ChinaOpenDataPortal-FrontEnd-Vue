@@ -12,6 +12,8 @@ import ResultItem from '@/components/ResultItem.vue'
 import { search } from '@/utils/fetch'
 import { searchResultFilter, toThousandFilter } from '@/utils/filters'
 import { setLoadingState, is_loading } from '@/utils/loading'
+import { isMobile } from '@/utils/device'
+import { page_items, swipe_up_handler_factory, touch_start } from '@/utils/pagination'
 import type { Filters, CanvasList, Footer, SearchResult } from '@/utils/types'
 
 defineProps<{
@@ -27,45 +29,39 @@ const update_filter = (new_filters: Filters) => {
 
 const route = useRoute()
 
+// result item expansion
+const results = ref<SearchResult[]>([])
+const curr_result = ref(-1)
+
+// result pagination
+const default_page_size = 5
+const curr_page = ref(1)
+const curr_page_size = ref(default_page_size)
+const curr_page_count = computed(() => Math.ceil(results.value.length / curr_page_size.value))
+const curr_page_items = computed(() =>
+  page_items(curr_page.value, curr_page_count.value, curr_page_size.value)
+)
+const curr_page_start = computed(() => (curr_page.value - 1) * curr_page_size.value + 1)
+const curr_page_end = computed(() =>
+  Math.min(results.value.length, curr_page.value * curr_page_size.value)
+)
+
+// result pagination for mobile device
+const swipe_up_handler = swipe_up_handler_factory(() => {
+  if (!isMobile() || curr_page_size.value >= results.value.length) {
+    return
+  }
+  curr_page_size.value += default_page_size
+})
+
+// search time
+let startTime: number
+const searchTime = ref('0.00')
 const timer = setInterval(() => {
   searchTime.value = ((Date.now() - startTime) / 1000).toFixed(2)
 }, 1000)
 
-const results = ref<SearchResult[]>([])
-const curr_result = ref(-1)
-const curr_page = ref(1)
-const curr_page_size = ref(5)
-const curr_page_count = computed(() => {
-  return Math.ceil(results.value.length / curr_page_size.value)
-})
-const curr_page_items = computed(() => {
-  const page_item_size = 5
-  if (curr_page_count.value <= page_item_size) {
-    return [...Array(curr_page_count.value).keys()].map((i) => i + 1)
-  }
-  var page_items = [...Array(page_item_size).keys()].map(
-    (i) => curr_page.value + i - Math.floor(page_item_size / 2)
-  )
-  if (page_items[0] < 1) {
-    page_items = page_items.map((i) => i - page_items[0] + 1)
-  }
-  if (page_items[page_items.length - 1] > curr_page_count.value) {
-    page_items = page_items.map(
-      (i) => i - page_items[page_items.length - 1] + curr_page_count.value
-    )
-  }
-  return page_items
-})
-const curr_page_start = computed(() => {
-  return (curr_page.value - 1) * curr_page_size.value + 1
-})
-const curr_page_end = computed(() => {
-  return Math.min(results.value.length, curr_page.value * curr_page_size.value)
-})
-
-let startTime: number
-const searchTime = ref('0.00')
-
+// refetch results & update view
 const updateView = () => {
   const query = route.query.q
   if (!query || Array.isArray(query) || query.trim() === '') {
@@ -89,7 +85,7 @@ updateView()
 </script>
 
 <template>
-  <div class="page-wrapper">
+  <div class="page-wrapper" @touchstart="touch_start = $event" @touchend="swipe_up_handler">
     <div class="page-header" v-show="!is_loading">
       <div class="container-xl">
         <div class="row g-2 align-items-center">
@@ -119,7 +115,10 @@ updateView()
                 @click="curr_result = curr_result === index ? -1 : index"
               />
             </div>
-            <div class="d-flex align-items-center mt-5" v-if="!is_loading && results.length > 0">
+            <div
+              class="d-flex align-items-center mt-5"
+              v-if="!(is_loading || isMobile()) && results.length > 0"
+            >
               <p class="m-0 text-secondary">
                 正在展示
                 <span>{{ results.length }}</span>
