@@ -1,26 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
 import type { SearchResult } from '@/utils/types'
 
 defineProps<{
   result: SearchResult
   expanded: boolean
 }>()
-
-const hovering = ref(false)
 </script>
 
 <template>
   <div
-    class="card cursor-pointer"
+    class="card card-link card-link-pop card-link-highlight cursor-pointer"
     :class="{
       'bg-primary-lt': expanded
     }"
-    @mouseenter="hovering = true"
-    @mouseleave="hovering = false"
+    style="margin-left: 0"
   >
-    <div class="card-status-top bg-cyan" v-show="hovering && !expanded"></div>
     <div class="card-header">
       <h3 class="card-title">
         {{ result.title }}
@@ -124,3 +118,11 @@ const hovering = ref(false)
     </div>
   </div>
 </template>
+
+<style scoped>
+.card-link-highlight:hover {
+  --tblr-primary-rgb: 32, 107, 196;
+  --tblr-active-bg: rgba(var(--tblr-primary-rgb), 0.04);
+  --tblr-card-bg: var(--tblr-active-bg);
+}
+</style>
