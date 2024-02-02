@@ -50,6 +50,7 @@ export type Filters = {
 }
 
 export type SearchResult = {
+  doc_id: number
   title: string
   description: string
   tags: string[]
@@ -65,7 +66,7 @@ export type SearchResult = {
   email: string
   data_formats: string[]
   province: string
-  city: string
+  city?: string
   url: string
   portal_name: string
   standard_industry: string

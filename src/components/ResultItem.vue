@@ -5,6 +5,16 @@ defineProps<{
   result: SearchResult
   expanded: boolean
 }>()
+
+const copyUrl = async () => {
+  try {
+    const url = new URL(window.location.href)
+    await navigator.clipboard.writeText(url.href)
+    alert('已复制链接到剪贴板')
+  } catch (err) {
+    alert('复制失败')
+  }
+}
 </script>
 
 <template>
@@ -13,7 +23,13 @@ defineProps<{
     :class="{
       'bg-primary-lt': expanded
     }"
-    style="margin-left: 0"
+    style="
+      margin-left: 0;
+      transition:
+        transform 0.1s ease-out,
+        opacity 0.1s ease-out,
+        box-shadow 0.1s ease-out;
+    "
   >
     <div class="card-header">
       <h3 class="card-title">
@@ -21,7 +37,7 @@ defineProps<{
       </h3>
       <ul class="nav nav-pills card-header-pills">
         <li class="nav-item ms-auto">
-          <a class="nav-link" href="#">
+          <a class="nav-link" @click.stop="copyUrl">
             <!-- Download SVG icon from http://tabler-icons.io/i/share -->
             <svg
               xmlns="http://www.w3.org/2000/svg"

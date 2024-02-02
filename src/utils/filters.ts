@@ -23,6 +23,7 @@ export function dateFilter(date: Date | string) {
 
 export function searchResultFilter(res: SearchResult) {
   return {
+    doc_id: res.doc_id,
     title: res.title || '-',
     description: res.description || '-',
     tags: res.tags,
@@ -39,8 +40,8 @@ export function searchResultFilter(res: SearchResult) {
     data_formats: res.data_formats,
     url: res.url,
     province: res.province || '-',
-    city: res.city,
+    city: res.province === res.city ? undefined : res.city,
     portal_name: res.portal_name || '-',
     standard_industry: res.standard_industry || '-'
-  }
+  } as SearchResult
 }

@@ -29,9 +29,21 @@ const update_filter = (new_filters: Filters) => {
 
 const route = useRoute()
 
-// result item expansion
+// save current result index
 const results = ref<SearchResult[]>([])
 const curr_result = ref(-1)
+watch(curr_result, (res_idx) => {
+  if (res_idx === -1) {
+    return
+  }
+  const result = results.value[res_idx]
+  if (result) {
+    const doc_id = result.doc_id
+    const url = new URL(window.location.href)
+    url.searchParams.set('doc_id', `${doc_id}`)
+    window.history.pushState({}, '', url.href)
+  }
+})
 
 // result pagination
 const default_page_size = 5
@@ -54,7 +66,7 @@ const swipe_up_handler = swipe_up_handler_factory(() => {
   curr_page_size.value += default_page_size
 })
 
-// search time
+// calculate search time
 let startTime: number
 const searchTime = ref('0.00')
 const timer = setInterval(() => {
