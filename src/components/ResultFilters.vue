@@ -60,6 +60,41 @@ fetch_filters().then((res) => {
   locations.value = sorted_locations
   industries.value = sort_list(res.industries)
   reset_filter()
+
+  // set filter value from url
+  const url = new URL(window.location.href)
+  const province = url.searchParams.get('province')
+  const city = url.searchParams.get('city')
+  const industry = url.searchParams.get('industry')
+  const openness = url.searchParams.get('openness')
+  if (province && province in locations.value) {
+    curr_province.value = province
+  } else {
+    url.searchParams.delete('province')
+  }
+  if (city && province && locations.value[province]?.includes(city)) {
+    curr_city.value = city
+  } else {
+    url.searchParams.delete('city')
+  }
+  if (industry && industries.value.includes(industry)) {
+    curr_industry.value = industry
+  } else {
+    url.searchParams.delete('industry')
+  }
+  switch (openness) {
+    case 'open':
+      type_cond_selected.value = false
+      break
+    case 'cond':
+      type_open_selected.value = false
+      break
+    default:
+      url.searchParams.delete('openness')
+  }
+  if (window.location.href !== url.href) {
+    window.location.replace(url.href)
+  }
 })
 
 const show_cites = computed(() => locations.value[curr_province.value]?.length > 0)
@@ -131,6 +166,7 @@ watch(curr_province, () => {
     <div class="mt-5">
       <a
         class="btn btn-primary w-100"
+        href="#"
         @click="invalid_filters ? null : $emit('update:filters', curr_filters)"
       >
         <!-- Download SVG icon from https://tabler.io/i/filter -->
@@ -153,7 +189,11 @@ watch(curr_province, () => {
         </svg>
         应用更改
       </a>
-      <a class="btn btn-link w-100" @click="reset_filter(), $emit('update:filters', curr_filters)">
+      <a
+        class="btn btn-link w-100"
+        href="#"
+        @click="reset_filter(), $emit('update:filters', curr_filters)"
+      >
         <!-- Download SVG icon from http://tabler-icons.io/i/filter-off -->
         <svg
           xmlns="http://www.w3.org/2000/svg"

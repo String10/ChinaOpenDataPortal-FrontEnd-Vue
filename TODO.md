@@ -2,7 +2,7 @@
 
   - [x] Fetch `Statistics` and `Recent Activities`.
   - [x] Pages in Desktop & Infinite Stream in Mobile.
-  - [ ] Filter <-> URL.
+  - [x] Filter <-> URL.
   - [ ] Link Share: Add DocId to SearchResult Type.
 
 - [ ] Back-End Test: Deploy on a Server.

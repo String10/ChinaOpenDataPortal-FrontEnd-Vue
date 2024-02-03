@@ -14,20 +14,56 @@ import { searchResultFilter, toThousandFilter } from '@/utils/filters'
 import { setLoadingState, is_loading } from '@/utils/loading'
 import { isMobile } from '@/utils/device'
 import { page_items, swipe_up_handler_factory, touch_start } from '@/utils/pagination'
-import type { Filters, CanvasList, Footer, SearchResult } from '@/utils/types'
+import {
+  type Filters,
+  type CanvasList,
+  type Footer,
+  type SearchResult,
+  FilterOpenness
+} from '@/utils/types'
 
 defineProps<{
   canvas: CanvasList
   footer: Footer
 }>()
 
+const route = useRoute()
+
+// search filters
 const filters = ref<Filters>()
 const update_filter = (new_filters: Filters) => {
   filters.value = new_filters
+
+  const url = new URL(window.location.href)
+  if (new_filters.province && new_filters.province != '全部') {
+    url.searchParams.set('province', `${new_filters.province}`)
+  } else {
+    url.searchParams.delete('province')
+  }
+  if (new_filters.city && new_filters.city != '全部') {
+    url.searchParams.set('city', `${new_filters.city}`)
+  } else {
+    url.searchParams.delete('city')
+  }
+  if (new_filters.industry && new_filters.industry != '全部') {
+    url.searchParams.set('industry', `${new_filters.industry}`)
+  } else {
+    url.searchParams.delete('industry')
+  }
+  switch (new_filters.openness) {
+    case FilterOpenness.Open:
+      url.searchParams.set('openness', 'open')
+      break
+    case FilterOpenness.Cond:
+      url.searchParams.set('openness', 'cond')
+      break
+    default:
+      url.searchParams.delete('openness')
+  }
+  window.history.pushState({}, '', url.href)
+
   updateView()
 }
-
-const route = useRoute()
 
 // save current result index
 const results = ref<SearchResult[]>([])
