@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { showToast } from '@/utils/toast'
 import type { SearchResult } from '@/utils/types'
 
-defineProps<{
+const props = defineProps<{
   result: SearchResult
   expanded: boolean
 }>()
@@ -10,9 +11,9 @@ const copyUrl = async () => {
   try {
     const url = new URL(window.location.href)
     await navigator.clipboard.writeText(url.href)
-    alert('已复制链接到剪贴板')
+    showToast('已复制链接到剪贴板', props.result.title)
   } catch (err) {
-    alert('复制失败')
+    showToast('复制失败')
   }
 }
 </script>

@@ -3,7 +3,9 @@ import { ref } from 'vue'
 import type { RouterView } from 'vue-router'
 
 import PortalHeader from '@/components/PortalHeader.vue'
+import CustomToast from '@/components/CustomToast.vue'
 
+import { toasts, removeToast } from '@/utils/toast'
 import type { CanvasList, Footer } from '@/utils/types'
 
 const canvas = ref<CanvasList>({
@@ -40,4 +42,5 @@ const footer = ref<Footer>({
     <PortalHeader />
     <RouterView :footer="footer" :canvas="canvas" />
   </div>
+  <CustomToast :toasts="toasts" @remove-toast="removeToast" />
 </template>
