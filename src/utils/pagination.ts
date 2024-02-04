@@ -17,8 +17,8 @@ export function page_items(curr_page: number, page_count: number, item_size: num
   if (page_items[0] < 1) {
     page_items = page_items.map((i) => i - page_items[0] + 1)
   }
-  if (page_items[page_items.length - 1] > item_size) {
-    page_items = page_items.map((i) => i - page_items[page_items.length - 1] + item_size)
+  if (page_items[page_items.length - 1] > page_count) {
+    page_items = page_items.map((i) => i - page_items[page_items.length - 1] + page_count)
   }
   return page_items
 }

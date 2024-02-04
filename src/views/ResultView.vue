@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import AboutCanvas from '@/components/AboutCanvas.vue'
@@ -68,14 +68,15 @@ const update_filter = (new_filters: Filters) => {
 // save current result index
 const results = ref<SearchResult[]>([])
 const curr_result = ref(-1)
-watch(curr_result, (res_idx) => {
-  if (res_idx === -1) {
+watch(curr_result, (doc_id) => {
+  const url = new URL(window.location.href)
+  if (doc_id < 0) {
+    url.searchParams.delete('doc_id')
+    window.history.pushState({}, '', url.href)
     return
   }
-  const result = results.value[res_idx]
+  const result = results.value.filter((item) => item.doc_id === doc_id)
   if (result) {
-    const doc_id = result.doc_id
-    const url = new URL(window.location.href)
     url.searchParams.set('doc_id', `${doc_id}`)
     window.history.pushState({}, '', url.href)
   }
@@ -124,6 +125,27 @@ const updateView = () => {
 
     results.value = items
 
+    const url = new URL(window.location.href)
+    const doc_id = url.searchParams.get('doc_id')
+    if (doc_id && items.length > 0) {
+      const idx = items.findIndex((item) => item.doc_id === +doc_id)
+      if (idx >= 0) {
+        curr_result.value = items[idx].doc_id
+        if (isMobile()) {
+          curr_page_size.value = Math.ceil((idx + 1) / default_page_size) * default_page_size
+        } else {
+          curr_page.value = Math.ceil((idx + 1) / curr_page_size.value)
+        }
+        nextTick(() => {
+          const element = document.getElementById(`result-item-${doc_id}`)!
+          element.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+        })
+      } else {
+        url.searchParams.delete('doc_id')
+        window.location.replace(url.href)
+      }
+    }
+
     setLoadingState(false)
   })
 }
@@ -158,9 +180,10 @@ updateView()
               <ResultItem
                 v-for="(result, index) in results.slice(curr_page_start - 1, curr_page_end)"
                 :key="index"
+                :id="`result-item-${result.doc_id}`"
                 :result="searchResultFilter(result)"
-                :expanded="curr_result === index"
-                @click="curr_result = curr_result === index ? -1 : index"
+                :expanded="curr_result === result.doc_id"
+                @click="curr_result = curr_result === result.doc_id ? -1 : result.doc_id"
               />
             </div>
             <div
@@ -183,7 +206,7 @@ updateView()
                     disabled: curr_page <= 1
                   }"
                 >
-                  <a class="page-link" href="#" @click="curr_page -= 1">
+                  <a class="page-link" href="#" @click="(curr_result = -1), (curr_page -= 1)">
                     <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +234,9 @@ updateView()
                     active: page === curr_page
                   }"
                 >
-                  <a class="page-link" href="#" @click="curr_page = page">{{ page }}</a>
+                  <a class="page-link" href="#" @click="(curr_result = -1), (curr_page = page)">{{
+                    page
+                  }}</a>
                 </li>
                 <li
                   class="page-item"
@@ -219,7 +244,7 @@ updateView()
                     disabled: curr_page >= curr_page_count
                   }"
                 >
-                  <a class="page-link" href="#" @click="curr_page += 1">
+                  <a class="page-link" href="#" @click="(curr_result = -1), (curr_page += 1)">
                     下一页
                     <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
                     <svg
