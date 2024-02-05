@@ -1,4 +1,4 @@
-- [ ] Result View:
+- [x] Result View:
 
   - [x] Fetch `Statistics` and `Recent Activities`.
   - [x] Pages in Desktop & Infinite Stream in Mobile.

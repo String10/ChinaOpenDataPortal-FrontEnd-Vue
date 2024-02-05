@@ -21,7 +21,7 @@ export async function search(query: string, filters?: Filters) {
     const response = await axios.get<SearchResult[]>(`${backend_host}/search`, {
       params: {
         q: query,
-        is_open:
+        isopen:
           openness &&
           {
             [FilterOpenness.All]: undefined,
