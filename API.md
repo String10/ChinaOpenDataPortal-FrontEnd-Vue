@@ -66,8 +66,8 @@
         "return-type": [
             {
                 "doc_id": "number",
-                "title": "string",
-                "description": "string",
+                "title": "string", // 使用class="server-set-highlight-title"高亮
+                "description": "string", // 使用class="server-set-highlight-description"高亮
                 "tags": "string[]",
                 "department": "string",
                 "category": "string",

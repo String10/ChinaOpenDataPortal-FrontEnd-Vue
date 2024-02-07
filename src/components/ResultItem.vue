@@ -33,9 +33,7 @@ const copyUrl = async () => {
     "
   >
     <div class="card-header">
-      <h3 class="card-title">
-        {{ result.title }}
-      </h3>
+      <h3 class="card-title" v-html="result.title" />
       <ul class="nav nav-pills card-header-pills">
         <li class="nav-item ms-auto">
           <a class="nav-link" @click.stop="copyUrl">
@@ -79,9 +77,12 @@ const copyUrl = async () => {
           </div>
         </li>
       </ul>
-      <p class="text-secondary cursor-text mt-3" v-show="expanded" @click.stop>
-        {{ result.description }}
-      </p>
+      <p
+        class="text-secondary cursor-text mt-3"
+        v-show="expanded"
+        @click.stop
+        v-html="result.description"
+      />
       <div class="datagrid" v-show="expanded">
         <div class="datagrid-item">
           <div class="datagrid-title">来源部门</div>
@@ -138,8 +139,19 @@ const copyUrl = async () => {
 
 <style scoped>
 .card-link-highlight:hover {
-  --tblr-primary-rgb: 32, 107, 196;
   --tblr-active-bg: rgba(var(--tblr-primary-rgb), 0.04);
   --tblr-card-bg: var(--tblr-active-bg);
+}
+</style>
+
+<style>
+.card > .card-header > .card-title > .server-set-highlight-title {
+  color: var(--tblr-primary);
+}
+.card.bg-primary-lt > .card-header > .card-title > .server-set-highlight-title {
+  text-decoration: underline dotted;
+}
+.card > .card-body > p > .server-set-highlight-description {
+  text-decoration: underline dotted;
 }
 </style>
