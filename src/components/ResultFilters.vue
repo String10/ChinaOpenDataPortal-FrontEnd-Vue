@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
-import { fetch_filters } from '@/utils/fetch'
-import { FilterOpenness } from '@/utils/types'
+import { cached_filters } from '@/utils/cache'
+import { FilterOpenness, type FilterSet } from '@/utils/types'
+
+// refer to "apply changes" button
+const apply_filters = ref()
 
 const locations = ref<{ [key: string]: string[] }>({})
 const industries = ref<string[]>([])
@@ -40,7 +43,7 @@ const invalid_filters = computed(() => {
   return !(type_cond_selected.value || type_open_selected.value)
 })
 
-fetch_filters().then((res) => {
+cached_filters().then((res: FilterSet) => {
   const sort_list = (list: string[]) => {
     const contain_item = list.includes('全部')
     if (contain_item) {
@@ -95,6 +98,9 @@ fetch_filters().then((res) => {
   if (window.location.href !== url.href) {
     window.location.replace(url.href)
   }
+
+  // trigger "update:filters" event
+  apply_filters.value.click()
 })
 
 const show_cites = computed(() => locations.value[curr_province.value]?.length > 0)
@@ -167,6 +173,7 @@ watch(curr_province, () => {
       <a
         class="btn btn-primary w-100"
         href="#"
+        ref="apply_filters"
         @click="invalid_filters ? null : $emit('update:filters', curr_filters)"
       >
         <!-- Download SVG icon from https://tabler.io/i/filter -->

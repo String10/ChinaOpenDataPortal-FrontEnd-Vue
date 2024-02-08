@@ -60,7 +60,7 @@ export type SearchResult = {
   publish_time: Date | string
   update_time: Date | string
   update_frequency: string
-  is_open: boolean
+  is_open: boolean | string
   data_volume: number | string
   telephone: string
   email: string

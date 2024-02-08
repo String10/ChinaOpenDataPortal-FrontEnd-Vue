@@ -8,7 +8,7 @@ import PortalFooter from '@/components/PortalFooter.vue'
 import RecentActivities from '@/components/RecentActivities.vue'
 import StatisticTable from '@/components/StatisticTable.vue'
 
-import { fetch_activities, fetch_statistics } from '@/utils/fetch'
+import { cached_activities, cached_statistics } from '@/utils/cache'
 import type { Activity, CanvasList, Footer, Statistic } from '@/utils/types'
 
 defineProps<{
@@ -17,12 +17,12 @@ defineProps<{
 }>()
 
 const statistic_items = ref<Statistic[]>([])
-fetch_statistics().then((res) => {
+cached_statistics().then((res) => {
   statistic_items.value = res
 })
 
 const activity_items = ref<Activity[]>([])
-fetch_activities().then((res) => {
+cached_activities().then((res) => {
   activity_items.value = res
 })
 </script>

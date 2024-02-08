@@ -10,6 +10,7 @@ const props = defineProps<{
 const copyUrl = async () => {
   try {
     const url = new URL(window.location.href)
+    url.searchParams.set('doc_id', `${props.result.doc_id}`)
     await navigator.clipboard.writeText(url.href)
     showToast('已复制链接到剪贴板', props.result.title)
   } catch (err) {

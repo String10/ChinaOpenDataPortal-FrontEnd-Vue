@@ -1,3 +1,5 @@
+import { isString } from 'lodash'
+
 import type { SearchResult } from '@/utils/types'
 
 export function toThousandFilter(num: number | string) {
@@ -31,7 +33,7 @@ export function searchResultFilter(res: SearchResult) {
     category: res.category || '-',
     publish_time: dateFilter(res.publish_time) || '-',
     update_time: dateFilter(res.update_time) || '-',
-    is_open: res.is_open,
+    is_open: isString(res.is_open) ? res.is_open.includes('无条件') : res.is_open, // TODO: temp fix
     data_volume: toThousandFilter(res.data_volume),
     industry: res.industry || '-',
     update_frequency: res.update_frequency || '-',
