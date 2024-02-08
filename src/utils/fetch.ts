@@ -1,10 +1,12 @@
 import axios from 'axios'
 
+import { isString, pickBy } from 'lodash'
+
 import {
   FilterOpenness,
   type Activity,
-  type Filters,
   type FilterSet,
+  type Filters,
   type SearchResult,
   type Statistic
 } from '@/utils/types'
@@ -29,7 +31,7 @@ export async function search(query: string, filters?: Filters) {
             [FilterOpenness.Cond]: '有条件开放',
             [FilterOpenness.None]: undefined
           }[openness],
-        ...rest_filters
+        ...pickBy(rest_filters, isString)
       }
     })
     return response.data

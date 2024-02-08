@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import AboutCanvas from '@/components/AboutCanvas.vue'
 import CenteredDivider from '@/components/CenteredDivider.vue'
+import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import RecentActivities from '@/components/RecentActivities.vue'
 import StatisticTable from '@/components/StatisticTable.vue'
-import AboutCanvas from '@/components/AboutCanvas.vue'
-import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 
+import { fetch_activities, fetch_statistics } from '@/utils/fetch'
 import type { Activity, CanvasList, Footer, Statistic } from '@/utils/types'
-import { fetch_statistics, fetch_activities } from '@/utils/fetch'
 
 defineProps<{
   canvas: CanvasList

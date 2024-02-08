@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { fetch_filters } from '@/utils/fetch'
 import { FilterOpenness } from '@/utils/types'
@@ -83,10 +83,10 @@ fetch_filters().then((res) => {
     url.searchParams.delete('industry')
   }
   switch (openness) {
-    case 'open':
+    case '无条件开放':
       type_cond_selected.value = false
       break
-    case 'cond':
+    case '有条件开放':
       type_open_selected.value = false
       break
     default:

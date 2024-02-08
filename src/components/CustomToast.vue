@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onUpdated } from 'vue'
 import { Toast } from 'bootstrap'
+import { onUpdated } from 'vue'
 
 import { isMobile } from '@/utils/device'
 import type { ToastItem } from '@/utils/toast'

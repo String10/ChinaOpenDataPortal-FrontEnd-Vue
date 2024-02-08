@@ -3,23 +3,23 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import AboutCanvas from '@/components/AboutCanvas.vue'
+import EmptyResult from '@/components/EmptyResult.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import ResultFilters from '@/components/ResultFilters.vue'
-import EmptyResult from '@/components/EmptyResult.vue'
 import ResultItem from '@/components/ResultItem.vue'
 
+import { isMobile } from '@/utils/device'
 import { search } from '@/utils/fetch'
 import { searchResultFilter, toThousandFilter } from '@/utils/filters'
-import { setLoadingState, is_loading } from '@/utils/loading'
-import { isMobile } from '@/utils/device'
+import { is_loading, setLoadingState } from '@/utils/loading'
 import { page_items, swipe_up_handler_factory, touch_start } from '@/utils/pagination'
 import {
-  type Filters,
+  FilterOpenness,
   type CanvasList,
+  type Filters,
   type Footer,
-  type SearchResult,
-  FilterOpenness
+  type SearchResult
 } from '@/utils/types'
 
 defineProps<{
@@ -52,10 +52,10 @@ const update_filter = (new_filters: Filters) => {
   }
   switch (new_filters.openness) {
     case FilterOpenness.Open:
-      url.searchParams.set('openness', 'open')
+      url.searchParams.set('openness', '无条件开放')
       break
     case FilterOpenness.Cond:
-      url.searchParams.set('openness', 'cond')
+      url.searchParams.set('openness', '有条件开放')
       break
     default:
       url.searchParams.delete('openness')
