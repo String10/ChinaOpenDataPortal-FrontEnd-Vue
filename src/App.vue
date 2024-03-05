@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import type { RouterView } from 'vue-router'
 
-import PortalHeader from '@/components/PortalHeader.vue'
 import CustomToast from '@/components/CustomToast.vue'
+import PortalHeader from '@/components/PortalHeader.vue'
 
-import { toasts, removeToast } from '@/utils/toast'
+import { removeToast, toasts } from '@/utils/toast'
 import type { CanvasList, Footer } from '@/utils/types'
+
+import websoft_logo from '@/assets/logo-websoft.png'
 
 const canvas = ref<CanvasList>({
   about: {
@@ -25,7 +27,7 @@ const canvas = ref<CanvasList>({
 })
 const footer = ref<Footer>({
   left_part: {
-    logo_path: 'src/assets/logo-websoft.png', // TODO: replace with relative path
+    logo_path: websoft_logo,
     org_name: '南京大学万维网软件研究组',
     org_link: 'http://ws.nju.edu.cn/'
   },

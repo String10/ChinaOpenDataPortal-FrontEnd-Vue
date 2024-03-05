@@ -22,6 +22,6 @@ const cache_func_factory =
     return object
   }
 
-export const cached_filters = cache_func_factory('filters', fetch_filters)
-export const cached_statistics = cache_func_factory('statistics', fetch_statistics)
-export const cached_activities = cache_func_factory('activities', fetch_activities)
+export const cached_filters = cache_func_factory('Websoft-CODP-Filters', fetch_filters)
+export const cached_statistics = cache_func_factory('Websoft-CODP-Statistics', fetch_statistics)
+export const cached_activities = cache_func_factory('Websoft-CODP-Activities', fetch_activities)
