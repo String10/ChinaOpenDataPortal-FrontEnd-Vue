@@ -4,8 +4,7 @@ COPY ./ /app
 WORKDIR /app
 RUN npm install
 ARG VITE_BACKEND_HOST=VITE_BACKEND_HOST_PLACEHOLDER
-RUN set -x; npm run build \
-    && cp src/assets/logo-websoft.png dist/assets
+RUN npm run build
 
 # production stage
 FROM nginx:stable-alpine as production-stage
