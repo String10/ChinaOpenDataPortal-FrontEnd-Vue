@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import type { RouterView } from 'vue-router'
 
-import CustomToast from '@/components/CustomToast.vue'
+// import CustomToast from '@/components/CustomToast.vue'
 import PortalHeader from '@/components/PortalHeader.vue'
 
 import { removeToast, toasts } from '@/utils/toast'
