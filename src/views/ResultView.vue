@@ -144,6 +144,12 @@ const updateView = () => {
         url.searchParams.delete('doc_id')
         window.location.replace(url.href)
       }
+    } else {
+      if (isMobile()) {
+        curr_page_size.value = default_page_size
+      } else {
+        curr_page.value = 1
+      }
     }
 
     setLoadingState(false)
