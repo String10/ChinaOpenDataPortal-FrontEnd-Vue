@@ -58,7 +58,7 @@
         "method": "GET",
         "parameters": {
             "q": "string", // 必需
-            "is_open": "无条件开放 | 有条件开放",
+            "openness": "无条件开放 | 有条件开放",
             "province": "string",
             "city": "string",
             "industry": "string"
