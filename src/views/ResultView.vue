@@ -149,6 +149,8 @@ const updateView = () => {
     setLoadingState(false)
   })
 }
+
+watch(() => route.params, updateView)
 </script>
 
 <template>

@@ -11,6 +11,12 @@ defineProps<{
 const route = useRoute()
 const query = ref(route.query?.q as string)
 watch(
+  () => route.path,
+  () => {
+    query.value = ''
+  }
+)
+watch(
   () => route.query?.q,
   (new_query) => {
     query.value = new_query as string
