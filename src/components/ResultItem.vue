@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { showToast } from '@/utils/toast'
+import { ref } from 'vue'
+
 import type { SearchResult } from '@/utils/types'
 
 const props = defineProps<{
@@ -7,14 +8,19 @@ const props = defineProps<{
   expanded: boolean
 }>()
 
+const copy_success = ref(false)
+
 const copyUrl = async () => {
   try {
     const url = new URL(window.location.href)
     url.searchParams.set('doc_id', `${props.result.doc_id}`)
     await navigator.clipboard.writeText(url.href)
-    showToast('已复制链接到剪贴板', props.result.title.replace(/<[^>]*>?/gm, ''))
-  } catch (err) {
-    showToast('复制失败')
+    copy_success.value = true
+    setTimeout(() => {
+      copy_success.value = false
+    }, 3000)
+  } catch (error) {
+    console.error(error)
   }
 }
 </script>
@@ -50,6 +56,9 @@ const copyUrl = async () => {
               fill="none"
               stroke-linecap="round"
               stroke-linejoin="round"
+              :class="{
+                'icon-tada': copy_success
+              }"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />

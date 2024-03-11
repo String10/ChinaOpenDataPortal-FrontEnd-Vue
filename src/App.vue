@@ -2,10 +2,8 @@
 import { ref } from 'vue'
 import type { RouterView } from 'vue-router'
 
-// import CustomToast from '@/components/CustomToast.vue'
 import PortalHeader from '@/components/PortalHeader.vue'
 
-import { removeToast, toasts } from '@/utils/toast'
 import type { CanvasList, Footer } from '@/utils/types'
 
 import websoft_logo from '@/assets/logo-websoft.png'
@@ -44,5 +42,4 @@ const footer = ref<Footer>({
     <PortalHeader />
     <RouterView :footer="footer" :canvas="canvas" />
   </div>
-  <CustomToast :toasts="toasts" @remove-toast="removeToast" />
 </template>
