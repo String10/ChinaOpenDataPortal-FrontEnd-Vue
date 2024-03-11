@@ -1,8 +1,17 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue'
+
 defineProps<{
   id: string
   label: string
 }>()
+
+const feedbackEmail = ref('')
+const feedbackText = ref('')
+
+const feedbackEmailValid = computed(() => {
+  return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(feedbackEmail.value)
+})
 </script>
 
 <template>
@@ -18,19 +27,31 @@ defineProps<{
     </div>
     <div class="offcanvas-body">
       <div class="mb-3">
-        <label class="form-label">联系方式</label>
+        <label class="form-label required">联系方式</label>
         <div class="form-floating mb-3">
-          <input type="email" class="form-control" id="floating-input" autocomplete="off" />
+          <input
+            type="email"
+            class="form-control"
+            id="floating-input"
+            autocomplete="off"
+            v-model="feedbackEmail"
+            :class="{
+              'is-invalid': feedbackEmail.length > 0 && !feedbackEmailValid
+            }"
+          />
           <label for="floating-input">邮件地址</label>
         </div>
       </div>
       <div class="mb-3">
-        <label class="form-label">体验反馈<span class="form-label-description">0/100</span></label>
+        <label class="form-label required"
+          >体验反馈<span class="form-label-description">{{ feedbackText.length }}/300</span></label
+        >
         <textarea
           class="form-control"
           name="example-textarea-input"
           rows="6"
           placeholder="描述您遇到的问题或提供建议"
+          v-model="feedbackText"
         ></textarea>
       </div>
       <div class="mt-3">
