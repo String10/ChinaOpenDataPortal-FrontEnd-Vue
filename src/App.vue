@@ -30,9 +30,7 @@ const footer = ref<Footer>({
     org_link: 'http://ws.nju.edu.cn/'
   },
   right_part: [
-    { name: '关于', link: canvas.value.about.id, toggle: true },
-    { name: '源码', link: 'https://github.com/cqsss/ChinaOpenDataPortal', toggle: false },
-    { name: '反馈', link: canvas.value.feedback.id, toggle: true }
+    { name: '关于我们', link: canvas.value.about.id, toggle: true },
   ]
 })
 </script>

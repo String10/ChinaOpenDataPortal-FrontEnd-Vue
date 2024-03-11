@@ -8,4 +8,4 @@
   - [x] Link Share: Add DocId to SearchResult Type.
 
 - [x] Back-End Test: Deploy on a Server.
-- [ ] Feedback: Post then (Store in Database or Send Email).
+- [x] ~~Feedback: Post then (Store in Database or Send Email).~~
