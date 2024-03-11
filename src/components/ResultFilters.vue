@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
+import { isString } from 'lodash'
+
 import { cached_filters } from '@/utils/cache'
 import { FilterOpenness, type FilterSet } from '@/utils/types'
 
@@ -44,24 +46,36 @@ const invalid_filters = computed(() => {
 })
 
 cached_filters().then((res: FilterSet) => {
-  const sort_list = (list: string[]) => {
-    const contain_item = list.includes('全部')
-    if (contain_item) {
-      list.splice(list.indexOf('全部'), 1)
+  const sort_list = (list: string[], top_words: string | string[] = '') => {
+    if (isString(top_words)) {
+      if (top_words.length > 0 ? list.splice(list.indexOf(top_words), 1) : null) {
+        top_words = [top_words]
+      } else {
+        top_words = []
+      }
+    } else {
+      top_words = top_words.filter((item) => list.includes(item))
+      top_words.forEach((word) => {
+        list.splice(list.indexOf(word), 1)
+      })
     }
     list.sort((a, b) => a.localeCompare(b, 'zh-CN'))
-    if (contain_item) {
-      list.unshift('全部')
-    }
+    top_words.forEach((word) => {
+      list.unshift(word)
+    })
     return list
   }
 
   let sorted_locations: { [key: string]: string[] } = {}
-  sort_list(Object.keys(res.locations)).forEach((key) => {
-    sorted_locations[key] = sort_list(res.locations[key])
+  sort_list(Object.keys(res.locations), '全部').forEach((key) => {
+    var lst = sort_list(res.locations[key], [key, '全部'])
+    if (lst.length < 3 && lst.includes('全部')) {
+      lst.splice(lst.indexOf('全部'), 1)
+    }
+    sorted_locations[key] = lst
   })
   locations.value = sorted_locations
-  industries.value = sort_list(res.industries)
+  industries.value = sort_list(res.industries, '全部')
   reset_filter()
 
   // set filter value from url
