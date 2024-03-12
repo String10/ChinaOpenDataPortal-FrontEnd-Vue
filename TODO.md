@@ -2,8 +2,8 @@
 
   - [x] Fetch `Statistics` and `Recent Activities`.
   - [x] Pages in Desktop & Infinite Stream in Mobile.
-    - [ ] Mobile MS Edge.
-    - [ ] Mobile WeChat.
+    - [x] Mobile MS Edge.
+    - [x] Mobile WeChat.
   - [x] Filter <-> URL.
   - [x] Link Share: Add DocId to SearchResult Type.
 

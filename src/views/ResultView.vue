@@ -96,8 +96,9 @@ const curr_page_end = computed(() =>
 )
 
 // result pagination for mobile device
+const reached_bottom = computed(() => !isMobile() || curr_page_size.value >= results.value.length)
 const swipe_up_handler = swipe_up_handler_factory(() => {
-  if (!isMobile() || curr_page_size.value >= results.value.length) {
+  if (reached_bottom.value) {
     return
   }
   curr_page_size.value += default_page_size
@@ -190,6 +191,7 @@ watch(() => route.params, updateView)
                 :expanded="curr_result === result.doc_id"
                 @click="curr_result = curr_result === result.doc_id ? -1 : result.doc_id"
               />
+              <span v-show="reached_bottom" class="text-center text-secondary">已经到底了...</span>
             </div>
             <div
               class="d-flex align-items-center mt-5"

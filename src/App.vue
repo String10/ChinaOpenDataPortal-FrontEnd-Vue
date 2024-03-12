@@ -29,9 +29,7 @@ const footer = ref<Footer>({
     org_name: '南京大学万维网软件研究组',
     org_link: 'http://ws.nju.edu.cn/'
   },
-  right_part: [
-    { name: '关于我们', link: canvas.value.about.id, toggle: true },
-  ]
+  right_part: [{ name: '关于我们', link: canvas.value.about.id, toggle: true }]
 })
 </script>
 

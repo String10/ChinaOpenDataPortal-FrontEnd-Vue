@@ -29,8 +29,9 @@ export function swipe_up_handler_factory(handler: Function) {
     if (!touch_start.value) {
       return
     }
-    const { scrollHeight, scrollTop, clientHeight } = document.documentElement
-    const tolerance = 20
+    const scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+    const { scrollHeight, clientHeight } = document.documentElement
+    const tolerance = 120
     if (
       evt.changedTouches[0].clientY < touch_start.value.changedTouches[0].clientY &&
       scrollTop + clientHeight + tolerance >= scrollHeight
