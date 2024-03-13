@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import Clipboard from 'clipboard'
+
 import type { SearchResult } from '@/utils/types'
 
 const props = defineProps<{
@@ -8,20 +10,40 @@ const props = defineProps<{
   expanded: boolean
 }>()
 
+const share_button = ref<HTMLElement>()
 const copy_success = ref(false)
 
 const copyUrl = async () => {
+  const url = new URL(window.location.href)
+  url.searchParams.set('doc_id', `${props.result.doc_id}`)
   try {
-    const url = new URL(window.location.href)
-    url.searchParams.set('doc_id', `${props.result.doc_id}`)
     await navigator.clipboard.writeText(url.href)
-    copy_success.value = true
-    setTimeout(() => {
-      copy_success.value = false
-    }, 3000)
   } catch (error) {
     console.error(error)
+    if (!share_button.value) {
+      return
+    }
+
+    let clipboard = new Clipboard(share_button.value, {
+      text: function () {
+        return url.href
+      }
+    })
+    clipboard.on('success', function (e) {
+      e.clearSelection()
+      clipboard.destroy()
+    })
+    clipboard.on('error', function (e) {
+      console.error(e)
+      clipboard.destroy()
+    })
+
+    share_button.value.click()
   }
+  copy_success.value = true
+  setTimeout(() => {
+    copy_success.value = false
+  }, 3000)
 }
 </script>
 
@@ -43,7 +65,7 @@ const copyUrl = async () => {
       <h3 class="card-title" v-html="result.title" />
       <ul class="nav nav-pills card-header-pills">
         <li class="nav-item ms-auto">
-          <a class="nav-link" @click.stop="copyUrl">
+          <a class="nav-link" ref="share_button" @click.stop="copyUrl">
             <!-- Download SVG icon from http://tabler-icons.io/i/share -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
