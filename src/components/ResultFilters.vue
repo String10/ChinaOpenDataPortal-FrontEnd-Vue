@@ -6,6 +6,8 @@ import { isString } from 'lodash'
 import { cached_filters } from '@/utils/cache'
 import { FilterOpenness, type FilterSet } from '@/utils/types'
 
+defineEmits(['update:filters'])
+
 // refer to "apply changes" button
 const apply_filters = ref()
 

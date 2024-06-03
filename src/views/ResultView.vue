@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 
 import AboutCanvas from '@/components/AboutCanvas.vue'
 import EmptyResult from '@/components/EmptyResult.vue'
+import ExplanationModal from '@/components/ExplanationModal.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import ResultFilters from '@/components/ResultFilters.vue'
@@ -157,6 +158,9 @@ const updateView = () => {
   })
 }
 
+// search result explanation
+const explanation = ref<string>('')
+
 watch(() => route.params, updateView)
 </script>
 
@@ -190,6 +194,7 @@ watch(() => route.params, updateView)
                 :result="searchResultFilter(result)"
                 :expanded="curr_result === result.doc_id"
                 @click="curr_result = curr_result === result.doc_id ? -1 : result.doc_id"
+                @update:explanation="explanation = $event"
               />
               <span v-show="isMobile() && reached_bottom" class="text-center text-secondary"
                 >已经到底了...</span
@@ -285,6 +290,7 @@ watch(() => route.params, updateView)
       :content="canvas.about.content || '暂无内容'"
     />
     <FeedbackCanvas :id="canvas.feedback.id" :label="`${canvas.feedback.id}-label`" />
+    <ExplanationModal :content="explanation" />
     <PortalFooter :left_part="footer.left_part" :right_part="footer.right_part" />
   </div>
 </template>
