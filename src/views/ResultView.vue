@@ -2,6 +2,8 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { isEqual } from 'lodash'
+
 import AboutCanvas from '@/components/AboutCanvas.vue'
 import EmptyResult from '@/components/EmptyResult.vue'
 import ExplanationModal from '@/components/ExplanationModal.vue'
@@ -33,6 +35,9 @@ const route = useRoute()
 // search filters
 const filters = ref<Filters>()
 const update_filter = (new_filters: Filters) => {
+  if (isEqual(filters.value, new_filters)) {
+    return
+  }
   filters.value = new_filters
 
   const url = new URL(window.location.href)
@@ -106,14 +111,14 @@ const swipe_up_handler = swipe_up_handler_factory(() => {
 })
 
 // calculate search time
-let startTime: number
 const searchTime = ref('0.00')
-const timer = setInterval(() => {
-  searchTime.value = ((Date.now() - startTime) / 1000).toFixed(2)
-}, 1000)
 
 // refetch results & update view
 const is_loading = isLoading()
+const rerank = ref(false)
+const update_rerank = (new_rerank: boolean) => {
+  rerank.value = new_rerank
+}
 const updateView = () => {
   const query = route.query.q
   if (!query || Array.isArray(query) || query.trim() === '') {
@@ -122,10 +127,8 @@ const updateView = () => {
 
   setLoadingState(true)
 
-  startTime = Date.now()
-  search(query, filters.value).then((items) => {
-    clearInterval(timer)
-
+  let startTime = Date.now()
+  search(query, filters.value, rerank.value).then((items) => {
     results.value = items
 
     const url = new URL(window.location.href)
@@ -155,6 +158,7 @@ const updateView = () => {
       }
     }
 
+    searchTime.value = ((Date.now() - startTime) / 1000).toFixed(2)
     setLoadingState(false)
   })
 }
@@ -165,12 +169,12 @@ const update_explanation = (new_explanation: string) => {
   explanation.value = new_explanation
 }
 
-watch(() => route.params, updateView)
+watch(() => route.query?.q, updateView)
 </script>
 
 <template>
   <div class="page-wrapper" @touchstart="touch_start = $event" @touchend="swipe_up_handler">
-    <div class="page-header" v-show="!is_loading">
+    <div class="page-header">
       <div class="container-xl">
         <div class="row g-2 align-items-center">
           <div class="col">
@@ -186,7 +190,7 @@ watch(() => route.params, updateView)
       <div class="container-xl">
         <div class="row g-4">
           <div class="col-sm-6 col-lg-3">
-            <ResultFilters @update:filters="update_filter" />
+            <ResultFilters @update:filters="update_filter" @update:rerank="update_rerank" />
           </div>
           <div class="col-sm-6 col-lg-9">
             <div class="row row-cards">

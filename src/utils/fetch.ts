@@ -20,7 +20,7 @@ function load_backend_host() {
   return backend_host
 }
 
-export async function search(query: string, filters?: Filters) {
+export async function search(query: string, filters?: Filters, rerank?: boolean) {
   const backend_host = load_backend_host()
   const default_value: SearchResult[] = []
   if (!backend_host) {
@@ -40,7 +40,7 @@ export async function search(query: string, filters?: Filters) {
             [FilterOpenness.Cond]: '有条件开放',
             [FilterOpenness.None]: undefined
           }[openness],
-        // rerank: '0',
+        rerank: rerank ? '1' : '0',
         ...pickBy(rest_filters, isString)
       }
     })
