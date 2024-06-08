@@ -3,9 +3,12 @@ import { ref } from 'vue'
 
 import Clipboard from 'clipboard'
 
+import { explain } from '@/utils/fetch'
+import { setLoadingState } from '@/utils/loading'
 import type { SearchResult } from '@/utils/types'
 
 const props = defineProps<{
+  query: string
   result: SearchResult
   expanded: boolean
 }>()
@@ -51,7 +54,11 @@ const copyUrl = async () => {
 }
 
 const update_explanation = () => {
-  emit('update:explanation', props.result.doc_id)
+  setLoadingState(true, 'explain')
+  explain(props.query, props.result).then((exp: string) => {
+    setLoadingState(false, 'explain')
+    emit('update:explanation', exp)
+  })
 }
 </script>
 

@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { is_loading } from '@/utils/loading'
+import { isLoading } from '@/utils/loading'
 
 defineProps<{
   defaultQuery: string
@@ -23,6 +23,7 @@ watch(
   }
 )
 const router = useRouter()
+const is_loading = isLoading()
 </script>
 
 <template>

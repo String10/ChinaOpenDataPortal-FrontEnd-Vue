@@ -13,7 +13,7 @@ import ResultItem from '@/components/ResultItem.vue'
 import { isMobile } from '@/utils/device'
 import { search } from '@/utils/fetch'
 import { searchResultFilter, toThousandFilter } from '@/utils/filters'
-import { is_loading, setLoadingState } from '@/utils/loading'
+import { isLoading, setLoadingState } from '@/utils/loading'
 import { page_items, swipe_up_handler_factory, touch_start } from '@/utils/pagination'
 import {
   FilterOpenness,
@@ -113,6 +113,7 @@ const timer = setInterval(() => {
 }, 1000)
 
 // refetch results & update view
+const is_loading = isLoading()
 const updateView = () => {
   const query = route.query.q
   if (!query || Array.isArray(query) || query.trim() === '') {
@@ -160,6 +161,9 @@ const updateView = () => {
 
 // search result explanation
 const explanation = ref<string>('')
+const update_explanation = (new_explanation: string) => {
+  explanation.value = new_explanation
+}
 
 watch(() => route.params, updateView)
 </script>
@@ -191,10 +195,11 @@ watch(() => route.params, updateView)
                 v-for="(result, index) in results.slice(curr_page_start - 1, curr_page_end)"
                 :key="index"
                 :id="`result-item-${result.doc_id}`"
+                :query="route.query.q as string"
                 :result="searchResultFilter(result)"
                 :expanded="curr_result === result.doc_id"
                 @click="curr_result = curr_result === result.doc_id ? -1 : result.doc_id"
-                @update:explanation="explanation = $event"
+                @update:explanation="update_explanation"
               />
               <span v-show="isMobile() && reached_bottom" class="text-center text-secondary"
                 >已经到底了...</span

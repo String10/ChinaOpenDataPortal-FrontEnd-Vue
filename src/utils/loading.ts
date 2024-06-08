@@ -1,6 +1,11 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-export const is_loading = ref(false)
-export function setLoadingState(st: boolean) {
-  is_loading.value = st
+const is_loading = ref<{ [key: string]: boolean }>({})
+
+export function setLoadingState(st: boolean, key: string = '') {
+  is_loading.value[key] = st
+}
+
+export function isLoading(key: string = '') {
+  return computed(() => (key in is_loading.value ? is_loading.value[key] : false))
 }
