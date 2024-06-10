@@ -11,8 +11,17 @@ import {
   type Statistic
 } from '@/utils/types'
 
-export async function search(query: string, filters?: Filters) {
+function load_backend_host() {
   const backend_host = import.meta.env.VITE_BACKEND_HOST
+  if (!backend_host) {
+    console.error('VUE_APP_BACKEND_HOST is not set')
+    return undefined
+  }
+  return backend_host
+}
+
+export async function search(query: string, filters?: Filters, rerank?: boolean) {
+  const backend_host = load_backend_host()
   const default_value: SearchResult[] = []
   if (!backend_host) {
     console.error('VUE_APP_BACKEND_HOST is not set')
@@ -31,6 +40,7 @@ export async function search(query: string, filters?: Filters) {
             [FilterOpenness.Cond]: '有条件开放',
             [FilterOpenness.None]: undefined
           }[openness],
+        rerank: rerank ? '1' : '0',
         ...pickBy(rest_filters, isString)
       }
     })
@@ -41,14 +51,33 @@ export async function search(query: string, filters?: Filters) {
   return default_value
 }
 
+export async function explain(query: string, metadata: SearchResult) {
+  const backend_host = load_backend_host()
+  const default_value = ''
+  if (!backend_host) {
+    return default_value
+  }
+  try {
+    const response = await axios.get<string>(`${backend_host}/explain`, {
+      params: {
+        q: query,
+        docid: metadata.doc_id
+      }
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+  return default_value
+}
+
 export async function fetch_filters() {
-  const backend_host = import.meta.env.VITE_BACKEND_HOST
+  const backend_host = load_backend_host()
   const default_value: FilterSet = {
     locations: {},
     industries: []
   }
   if (!backend_host) {
-    console.error('VUE_APP_BACKEND_HOST is not set')
     return default_value
   }
   try {
@@ -61,10 +90,9 @@ export async function fetch_filters() {
 }
 
 export async function fetch_statistics() {
-  const backend_host = import.meta.env.VITE_BACKEND_HOST
+  const backend_host = load_backend_host()
   const default_value: Statistic[] = []
   if (!backend_host) {
-    console.error('VUE_APP_BACKEND_HOST is not set')
     return default_value
   }
   try {
@@ -77,10 +105,9 @@ export async function fetch_statistics() {
 }
 
 export async function fetch_activities() {
-  const backend_host = import.meta.env.VITE_BACKEND_HOST
+  const backend_host = load_backend_host()
   const default_value: Activity[] = []
   if (!backend_host) {
-    console.error('VUE_APP_BACKEND_HOST is not set')
     return default_value
   }
   try {

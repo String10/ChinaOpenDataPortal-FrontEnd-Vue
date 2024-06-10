@@ -2,8 +2,11 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { isEqual } from 'lodash'
+
 import AboutCanvas from '@/components/AboutCanvas.vue'
 import EmptyResult from '@/components/EmptyResult.vue'
+import ExplanationModal from '@/components/ExplanationModal.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import ResultFilters from '@/components/ResultFilters.vue'
@@ -12,7 +15,7 @@ import ResultItem from '@/components/ResultItem.vue'
 import { isMobile } from '@/utils/device'
 import { search } from '@/utils/fetch'
 import { searchResultFilter, toThousandFilter } from '@/utils/filters'
-import { is_loading, setLoadingState } from '@/utils/loading'
+import { isLoading, setLoadingState } from '@/utils/loading'
 import { page_items, swipe_up_handler_factory, touch_start } from '@/utils/pagination'
 import {
   FilterOpenness,
@@ -32,6 +35,9 @@ const route = useRoute()
 // search filters
 const filters = ref<Filters>()
 const update_filter = (new_filters: Filters) => {
+  if (isEqual(filters.value, new_filters)) {
+    return
+  }
   filters.value = new_filters
 
   const url = new URL(window.location.href)
@@ -105,13 +111,14 @@ const swipe_up_handler = swipe_up_handler_factory(() => {
 })
 
 // calculate search time
-let startTime: number
 const searchTime = ref('0.00')
-const timer = setInterval(() => {
-  searchTime.value = ((Date.now() - startTime) / 1000).toFixed(2)
-}, 1000)
 
 // refetch results & update view
+const is_loading = isLoading()
+const rerank = ref(false)
+const update_rerank = (new_rerank: boolean) => {
+  rerank.value = new_rerank
+}
 const updateView = () => {
   const query = route.query.q
   if (!query || Array.isArray(query) || query.trim() === '') {
@@ -120,10 +127,8 @@ const updateView = () => {
 
   setLoadingState(true)
 
-  startTime = Date.now()
-  search(query, filters.value).then((items) => {
-    clearInterval(timer)
-
+  let startTime = Date.now()
+  search(query, filters.value, rerank.value).then((items) => {
     results.value = items
 
     const url = new URL(window.location.href)
@@ -153,16 +158,23 @@ const updateView = () => {
       }
     }
 
+    searchTime.value = ((Date.now() - startTime) / 1000).toFixed(2)
     setLoadingState(false)
   })
 }
 
-watch(() => route.params, updateView)
+// search result explanation
+const explanation = ref<string>('')
+const update_explanation = (new_explanation: string) => {
+  explanation.value = new_explanation
+}
+
+watch(() => route.query?.q, updateView)
 </script>
 
 <template>
   <div class="page-wrapper" @touchstart="touch_start = $event" @touchend="swipe_up_handler">
-    <div class="page-header" v-show="!is_loading">
+    <div class="page-header">
       <div class="container-xl">
         <div class="row g-2 align-items-center">
           <div class="col">
@@ -178,7 +190,7 @@ watch(() => route.params, updateView)
       <div class="container-xl">
         <div class="row g-4">
           <div class="col-sm-6 col-lg-3">
-            <ResultFilters @update:filters="update_filter" />
+            <ResultFilters @update:filters="update_filter" @update:rerank="update_rerank" />
           </div>
           <div class="col-sm-6 col-lg-9">
             <div class="row row-cards">
@@ -187,9 +199,11 @@ watch(() => route.params, updateView)
                 v-for="(result, index) in results.slice(curr_page_start - 1, curr_page_end)"
                 :key="index"
                 :id="`result-item-${result.doc_id}`"
+                :query="route.query.q as string"
                 :result="searchResultFilter(result)"
                 :expanded="curr_result === result.doc_id"
                 @click="curr_result = curr_result === result.doc_id ? -1 : result.doc_id"
+                @update:explanation="update_explanation"
               />
               <span v-show="isMobile() && reached_bottom" class="text-center text-secondary"
                 >已经到底了...</span
@@ -285,6 +299,7 @@ watch(() => route.params, updateView)
       :content="canvas.about.content || '暂无内容'"
     />
     <FeedbackCanvas :id="canvas.feedback.id" :label="`${canvas.feedback.id}-label`" />
+    <ExplanationModal :content="explanation" />
     <PortalFooter :left_part="footer.left_part" :right_part="footer.right_part" />
   </div>
 </template>

@@ -6,6 +6,8 @@ import { isString } from 'lodash'
 import { cached_filters } from '@/utils/cache'
 import { FilterOpenness, type FilterSet } from '@/utils/types'
 
+defineEmits(['update:filters', 'update:rerank'])
+
 // refer to "apply changes" button
 const apply_filters = ref()
 
@@ -17,6 +19,9 @@ const curr_city = ref()
 const curr_industry = ref()
 const type_open_selected = ref(true)
 const type_cond_selected = ref(true)
+
+const llm_rerank = ref(false)
+
 const curr_filters = computed(() => {
   let filters = {
     province: curr_province.value,
@@ -39,6 +44,8 @@ const reset_filter = () => {
   curr_industry.value = industries.value[0]
   type_open_selected.value = true
   type_cond_selected.value = true
+
+  llm_rerank.value = false
 }
 
 const invalid_filters = computed(() => {
@@ -183,12 +190,29 @@ watch(curr_province, () => {
       </label>
     </div>
     <div class="alert alert-danger m-0" v-show="invalid_filters">请选择至少一种开放类型</div>
+    <!-- Others -->
+    <div class="subheader mb-2">其他</div>
+    <div class="mb-3">
+      <label class="form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          name="form-tags[]"
+          value="rerank"
+          v-model="llm_rerank"
+        />
+        <span class="form-check-label">大语言模型重排（耗时较长）</span>
+      </label>
+    </div>
     <div class="mt-5">
       <a
         class="btn btn-primary w-100"
         href="#"
         ref="apply_filters"
-        @click="invalid_filters ? null : $emit('update:filters', curr_filters)"
+        @click="
+          invalid_filters ? null : $emit('update:filters', curr_filters),
+            $emit('update:rerank', llm_rerank)
+        "
       >
         <!-- Download SVG icon from https://tabler.io/i/filter -->
         <svg
@@ -213,7 +237,9 @@ watch(curr_province, () => {
       <a
         class="btn btn-link w-100"
         href="#"
-        @click="reset_filter(), $emit('update:filters', curr_filters)"
+        @click="
+          reset_filter(), $emit('update:filters', curr_filters), $emit('update:rerank', llm_rerank)
+        "
       >
         <!-- Download SVG icon from http://tabler-icons.io/i/filter-off -->
         <svg

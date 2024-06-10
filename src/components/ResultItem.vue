@@ -3,15 +3,22 @@ import { ref } from 'vue'
 
 import Clipboard from 'clipboard'
 
+import { explain } from '@/utils/fetch'
+import { setLoadingState } from '@/utils/loading'
 import type { SearchResult } from '@/utils/types'
 
 const props = defineProps<{
+  query: string
   result: SearchResult
   expanded: boolean
 }>()
 
+const emit = defineEmits(['update:explanation'])
+
 const share_button = ref<HTMLElement>()
 const copy_success = ref(false)
+
+const explain_button = ref<HTMLElement>()
 
 const copyUrl = async () => {
   const url = new URL(window.location.href)
@@ -45,6 +52,14 @@ const copyUrl = async () => {
     copy_success.value = false
   }, 3000)
 }
+
+const update_explanation = () => {
+  setLoadingState(true, 'explain')
+  explain(props.query, props.result).then((exp: string) => {
+    setLoadingState(false, 'explain')
+    emit('update:explanation', exp)
+  })
+}
 </script>
 
 <template>
@@ -65,6 +80,37 @@ const copyUrl = async () => {
       <h3 class="card-title" v-html="result.title" />
       <ul class="nav nav-pills card-header-pills">
         <li class="nav-item ms-auto">
+          <button
+            type="button"
+            class="nav-link"
+            ref="explain_button"
+            data-bs-toggle="modal"
+            data-bs-target="#modal-explanation"
+            @click.stop="update_explanation"
+          >
+            <!-- Download SVG icon from http://tabler-icons.io/i/message-circle-question -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-message-circle-question"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M15.02 19.52c-2.341 .736 -5 .606 -7.32 -.52l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c1.649 1.407 2.575 3.253 2.742 5.152"
+              />
+              <path d="M19 22v.01" />
+              <path d="M19 19a2.003 2.003 0 0 0 .914 -3.782a1.98 1.98 0 0 0 -2.414 .483" />
+            </svg>
+          </button>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" ref="share_button" @click.stop="copyUrl">
             <!-- Download SVG icon from http://tabler-icons.io/i/share -->
             <svg
