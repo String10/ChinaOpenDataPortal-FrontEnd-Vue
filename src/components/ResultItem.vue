@@ -88,7 +88,7 @@ const update_explanation = () => {
             data-bs-target="#modal-explanation"
             @click.stop="update_explanation"
           >
-            <!-- Download SVG icon from http://tabler-icons.io/i/message-circle-question -->
+            <!-- Download SVG icon from http://tabler-icons.io/i/analyze -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -99,15 +99,16 @@ const update_explanation = () => {
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-message-circle-question"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-analyze"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path
-                d="M15.02 19.52c-2.341 .736 -5 .606 -7.32 -.52l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c1.649 1.407 2.575 3.253 2.742 5.152"
-              />
-              <path d="M19 22v.01" />
-              <path d="M19 19a2.003 2.003 0 0 0 .914 -3.782a1.98 1.98 0 0 0 -2.414 .483" />
+              <path d="M20 11a8.1 8.1 0 0 0 -6.986 -6.918a8.095 8.095 0 0 0 -8.019 3.918" />
+              <path d="M4 13a8.1 8.1 0 0 0 15 3" />
+              <path d="M19 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+              <path d="M5 8m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+              <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
             </svg>
+            智能搜索说明
           </button>
         </li>
         <li class="nav-item">
