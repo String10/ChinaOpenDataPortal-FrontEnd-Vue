@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import Clipboard from 'clipboard'
-
 import { explain } from '@/utils/fetch'
 import { setLoadingState } from '@/utils/loading'
 import type { SearchResult } from '@/utils/types'
@@ -15,43 +13,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:explanation'])
 
-const share_button = ref<HTMLElement>()
-const copy_success = ref(false)
-
 const explain_button = ref<HTMLElement>()
-
-const copyUrl = async () => {
-  const url = new URL(window.location.href)
-  url.searchParams.set('doc_id', `${props.result.doc_id}`)
-  try {
-    await navigator.clipboard.writeText(url.href)
-  } catch (error) {
-    console.error(error)
-    if (!share_button.value) {
-      return
-    }
-
-    let clipboard = new Clipboard(share_button.value, {
-      text: function () {
-        return url.href
-      }
-    })
-    clipboard.on('success', function (e) {
-      e.clearSelection()
-      clipboard.destroy()
-    })
-    clipboard.on('error', function (e) {
-      console.error(e)
-      clipboard.destroy()
-    })
-
-    share_button.value.click()
-  }
-  copy_success.value = true
-  setTimeout(() => {
-    copy_success.value = false
-  }, 3000)
-}
 
 const update_explanation = () => {
   setLoadingState(true, 'explain')
@@ -112,30 +74,26 @@ const update_explanation = () => {
           </button>
         </li>
         <li class="nav-item">
-          <a class="nav-link" ref="share_button" @click.stop="copyUrl">
-            <!-- Download SVG icon from http://tabler-icons.io/i/share -->
+          <a class="nav-link" target="_blank" @click.stop="" :href="result.url">
+            <!-- Download SVG icon from http://tabler-icons.io/i/external-link -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="icon icon-tabler icon-tabler-share"
               width="24"
               height="24"
               viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
               fill="none"
+              stroke="currentColor"
+              stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              :class="{
-                'icon-tada': copy_success
-              }"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-external-link"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-              <path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-              <path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-              <path d="M8.7 10.7l6.6 -3.4" />
-              <path d="M8.7 13.3l6.6 3.4" />
+              <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+              <path d="M11 13l9 -9" />
+              <path d="M15 4h5v5" />
             </svg>
+            数据原始链接
           </a>
         </li>
       </ul>
