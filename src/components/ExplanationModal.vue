@@ -31,8 +31,8 @@ const is_loading = isLoading('explain')
           <div v-show="!is_loading">
             {{ content }}
           </div>
-          <div class="spinner-border spinner-border-sm" v-show="is_loading"></div>
-          <span v-show="is_loading"> 大语言模型耗时较长，请耐心等待…… </span>
+          <span v-show="is_loading">大语言模型耗时较长，请耐心等待</span>
+          <span class="animated-dots"></span>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn ms-auto" data-bs-dismiss="modal">关闭</button>
