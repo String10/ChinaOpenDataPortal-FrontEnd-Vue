@@ -73,12 +73,8 @@ export async function explain(query: string, metadata: SearchResult) {
 
 export async function fetch_filters() {
   const backend_host = load_backend_host()
-  const default_value: FilterSet = {
-    locations: {},
-    industries: []
-  }
   if (!backend_host) {
-    return default_value
+    return null
   }
   try {
     const response = await axios.get<FilterSet>(`${backend_host}/filters`)
@@ -86,14 +82,13 @@ export async function fetch_filters() {
   } catch (error) {
     console.error(error)
   }
-  return default_value
+  return null
 }
 
 export async function fetch_statistics() {
   const backend_host = load_backend_host()
-  const default_value: Statistic[] = []
   if (!backend_host) {
-    return default_value
+    return null
   }
   try {
     const response = await axios.get<Statistic[]>(`${backend_host}/statistics`)
@@ -101,14 +96,13 @@ export async function fetch_statistics() {
   } catch (error) {
     console.error(error)
   }
-  return default_value
+  return null
 }
 
 export async function fetch_activities() {
   const backend_host = load_backend_host()
-  const default_value: Activity[] = []
   if (!backend_host) {
-    return default_value
+    return null
   }
   try {
     const response = await axios.get<Activity[]>(`${backend_host}/activities`)
@@ -116,5 +110,5 @@ export async function fetch_activities() {
   } catch (error) {
     console.error(error)
   }
-  return default_value
+  return null
 }
