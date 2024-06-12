@@ -32,6 +32,7 @@ const is_loading = isLoading()
       router.push({
         name: 'result',
         query: {
+          ...route.query,
           q: query || defaultQuery
         }
       })
