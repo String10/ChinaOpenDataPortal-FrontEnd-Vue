@@ -55,15 +55,12 @@ export type SearchResult = {
   description: string
   tags: string[]
   department: string
-  category: string
   industry: string
   publish_time: Date | string
   update_time: Date | string
   update_frequency: string
   is_open: boolean | string
   data_volume: number | string
-  telephone: string
-  email: string
   data_formats: string[]
   province: string
   city?: string

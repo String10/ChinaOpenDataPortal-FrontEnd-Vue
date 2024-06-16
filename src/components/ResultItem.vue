@@ -126,12 +126,12 @@ const update_explanation = () => {
           <div class="datagrid-content">{{ result.department }}</div>
         </div>
         <div class="datagrid-item">
-          <div class="datagrid-title">重点领域</div>
-          <div class="datagrid-content">{{ result.category }}</div>
-        </div>
-        <div class="datagrid-item">
           <div class="datagrid-title">相关行业</div>
           <div class="datagrid-content">{{ result.industry }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">数据大小</div>
+          <div class="datagrid-content">{{ result.data_volume }}</div>
         </div>
         <div class="datagrid-item">
           <div class="datagrid-title">发布日期</div>
