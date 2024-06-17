@@ -191,7 +191,7 @@ watch(() => route.query?.q, updateView)
           </div>
           <div class="col d-flex justify-content-end">
             <div class="text-secondary mt-1 ms-auto" v-show="rerank">
-              大语言模型重排功能已启用（耗时可能较长）
+              大语言模型排序功能已启用（耗时可能较长）
             </div>
           </div>
         </div>

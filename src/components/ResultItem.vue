@@ -70,7 +70,7 @@ const update_explanation = () => {
               <path d="M5 8m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
               <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
             </svg>
-            智能搜索说明
+            搜索结果解读
           </button>
         </li>
         <li class="nav-item">
@@ -93,7 +93,7 @@ const update_explanation = () => {
               <path d="M11 13l9 -9" />
               <path d="M15 4h5v5" />
             </svg>
-            数据原始链接
+            数据集原始链接
           </a>
         </li>
       </ul>
