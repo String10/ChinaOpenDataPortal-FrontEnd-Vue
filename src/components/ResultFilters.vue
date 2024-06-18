@@ -20,8 +20,6 @@ const curr_industry = ref()
 const type_open_selected = ref(true)
 const type_cond_selected = ref(true)
 
-const llm_rerank = ref(false)
-
 const curr_filters = computed(() => {
   let filters = {
     province: curr_province.value,
@@ -44,8 +42,6 @@ const reset_filter = () => {
   curr_industry.value = industries.value[0]
   type_open_selected.value = true
   type_cond_selected.value = true
-
-  llm_rerank.value = false
 }
 
 const invalid_filters = computed(() => {
@@ -190,29 +186,12 @@ watch(curr_province, () => {
       </label>
     </div>
     <div class="alert alert-danger m-0" v-show="invalid_filters">请选择至少一种开放类型</div>
-    <!-- Others -->
-    <div class="subheader mb-2">其他</div>
-    <div class="mb-3">
-      <label class="form-check">
-        <input
-          type="checkbox"
-          class="form-check-input"
-          name="form-tags[]"
-          value="rerank"
-          v-model="llm_rerank"
-        />
-        <span class="form-check-label">大语言模型重排（耗时较长）</span>
-      </label>
-    </div>
     <div class="mt-5">
       <a
         class="btn btn-primary w-100"
         href="#"
         ref="apply_filters"
-        @click="
-          invalid_filters ? null : $emit('update:filters', curr_filters),
-            $emit('update:rerank', llm_rerank)
-        "
+        @click="invalid_filters ? null : $emit('update:filters', curr_filters)"
       >
         <!-- Download SVG icon from https://tabler.io/i/filter -->
         <svg
@@ -232,35 +211,7 @@ watch(curr_province, () => {
             d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z"
           />
         </svg>
-        应用更改
-      </a>
-      <a
-        class="btn btn-link w-100"
-        href="#"
-        @click="
-          reset_filter(), $emit('update:filters', curr_filters), $emit('update:rerank', llm_rerank)
-        "
-      >
-        <!-- Download SVG icon from http://tabler-icons.io/i/filter-off -->
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="icon icon-tabler icon-tabler-filter-off"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M8 4h12v2.172a2 2 0 0 1 -.586 1.414l-3.914 3.914m-.5 3.5v4l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227"
-          />
-          <path d="M3 3l18 18" />
-        </svg>
-        重置筛选
+        过滤搜索结果
       </a>
     </div>
   </form>

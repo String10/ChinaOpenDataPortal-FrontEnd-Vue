@@ -8,6 +8,7 @@ import AboutCanvas from '@/components/AboutCanvas.vue'
 import EmptyResult from '@/components/EmptyResult.vue'
 import ExplanationModal from '@/components/ExplanationModal.vue'
 import FeedbackCanvas from '@/components/FeedbackCanvas.vue'
+import LLMLoadingResult from '@/components/LLMLoadingResult.vue'
 import PortalFooter from '@/components/PortalFooter.vue'
 import ResultFilters from '@/components/ResultFilters.vue'
 import ResultItem from '@/components/ResultItem.vue'
@@ -115,9 +116,14 @@ const searchTime = ref('0.00')
 
 // refetch results & update view
 const is_loading = isLoading()
-const rerank = ref(false)
+const rerank = ref(true)
 const update_rerank = (new_rerank: boolean) => {
+  let old_rerank = rerank.value
   rerank.value = new_rerank
+
+  if (old_rerank != new_rerank) {
+    updateView()
+  }
 }
 const updateView = () => {
   const query = route.query.q
@@ -183,6 +189,11 @@ watch(() => route.query?.q, updateView)
               发现 {{ toThousandFilter(results.length) }} 个数据集（用时 {{ searchTime }} 秒）
             </div>
           </div>
+          <div class="col d-flex justify-content-end">
+            <div class="text-secondary mt-1 ms-auto" v-show="rerank">
+              大语言模型排序功能已启用（耗时可能较长）
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -195,7 +206,9 @@ watch(() => route.query?.q, updateView)
           <div class="col-sm-6 col-lg-9">
             <div class="row row-cards">
               <EmptyResult v-if="!(is_loading || results.length > 0)" />
+              <LLMLoadingResult v-show="is_loading && rerank" />
               <ResultItem
+                v-show="(!is_loading && results.length > 0) || !rerank"
                 v-for="(result, index) in results.slice(curr_page_start - 1, curr_page_end)"
                 :key="index"
                 :id="`result-item-${result.doc_id}`"
