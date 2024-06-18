@@ -21,6 +21,7 @@ const cache_func_factory =
     const object = await fetch_func()
     if (object != null) {
       localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), object }))
+      return object
     }
     return default_value
   }
