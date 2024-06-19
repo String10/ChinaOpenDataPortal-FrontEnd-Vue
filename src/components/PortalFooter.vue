@@ -11,6 +11,8 @@ defineProps<{
     toggle: boolean
   }[]
 }>()
+
+const beian_info = import.meta.env.VITE_BEIAN_NUMBER
 </script>
 
 <template>
@@ -29,6 +31,11 @@ defineProps<{
                 :aria-controls="item.toggle ? `${item.link}` : undefined"
               >
                 {{ item.name }}
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="link-secondary" href="https://beian.miit.gov.cn" target="_blank">
+                {{ beian_info }}
               </a>
             </li>
           </ul>
