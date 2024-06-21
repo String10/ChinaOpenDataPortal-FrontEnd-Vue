@@ -7,7 +7,7 @@ import SearchBar from '@/components/SearchBar.vue'
     <div class="container-xl">
       <div class="row g-2 align-items-center">
         <router-link class="col-auto mb-3 no-link-style" to="/">
-          <div class="page-pretitle">China Open Data Portal</div>
+          <div class="page-pretitle">China Public Data Search</div>
           <h1 class="page-title">全国公共数据一站式搜索</h1>
         </router-link>
 
