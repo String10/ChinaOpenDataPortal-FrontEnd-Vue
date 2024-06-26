@@ -12,7 +12,7 @@ import SearchBar from '@/components/SearchBar.vue'
         </router-link>
 
         <div class="col-12">
-          <SearchBar defaultQuery="山东省教师资格认定" />
+          <SearchBar defaultQuery="山东 教师资格认定" />
         </div>
       </div>
     </div>

@@ -185,7 +185,7 @@ watch(() => route.query?.q, updateView)
         <div class="row g-2 align-items-center">
           <div class="col">
             <h2 class="page-title">搜索结果</h2>
-            <div class="text-secondary mt-1">
+            <div class="text-secondary mt-1" v-show="!is_loading">
               发现 {{ toThousandFilter(results.length) }} 个数据集（用时 {{ searchTime }} 秒）
             </div>
           </div>
